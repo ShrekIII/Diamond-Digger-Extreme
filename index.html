@@ -474,6 +474,12 @@
     </div>
 
     <script>
+        // ========== BASE URLs für Assets ==========
+        const BASE_URL = 'https://shrekiii.github.io/Diamond-Digger-Extreme/';
+        const IMG_URL = BASE_URL + 'img/';
+        const LEVELS_URL = BASE_URL + 'levels/';
+        
+        // ========== DOM ELEMENTS ==========
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const distanceDisplay = document.getElementById('distance');
@@ -2488,8 +2494,8 @@
         
         // Setze Menü-Hintergrund (Bild muss im gleichen Verzeichnis liegen)
         const menuScreen = document.getElementById('menuScreen');
-        // Lade Hintergrundbild von GitHub Pages /img/
-        menuScreen.style.backgroundImage = 'url(https://shrekiii.github.io/Diamond-Digger-Extreme/img/Menu.png)';
+        // Lade Hintergrundbild von GitHub Pages
+        menuScreen.style.backgroundImage = `url(${IMG_URL}Menu.png)`;
         
         // ========== MENU & HIGHSCORE SYSTEM ==========
         
@@ -2975,10 +2981,11 @@
                 return;
             }
             
-            // Versuche Level-Datei von GitHub Pages /levels/ zu laden
+            // Versuche Level-Datei von GitHub Pages zu laden
             const levelFile = `level_${String(levelNum).padStart(2, '0')}.json`;
-            const levelUrl = `https://shrekiii.github.io/Diamond-Digger-Extreme/levels/${levelFile}`;
+            const levelUrl = `${LEVELS_URL}${levelFile}`;
             console.log(`📁 Versuche ${levelFile} von GitHub Pages zu laden...`);
+            console.log(`📍 URL: ${levelUrl}`);
             
             fetch(levelUrl)
                 .then(response => {
