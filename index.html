@@ -258,8 +258,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 600px;
-            overflow-y: auto;
+            overflow: hidden;  /* Keine Scrollbar */
         }
         
         .highscore-entry {
@@ -2489,8 +2488,8 @@
         
         // Setze Menü-Hintergrund (Bild muss im gleichen Verzeichnis liegen)
         const menuScreen = document.getElementById('menuScreen');
-        // Verwende das hochgeladene Bild
-        menuScreen.style.backgroundImage = 'url(Menu.png)';
+        // Lade Hintergrundbild von GitHub Pages /img/
+        menuScreen.style.backgroundImage = 'url(https://shrekiii.github.io/Diamond-Digger-Extreme/img/Menu.png)';
         
         // ========== MENU & HIGHSCORE SYSTEM ==========
         
@@ -2788,7 +2787,10 @@
                 return;
             }
             
-            list.innerHTML = highscores.map((entry, index) => `
+            // Zeige nur die ersten 8 Einträge (passen auf Bildschirm ohne Scroll)
+            const displayCount = Math.min(highscores.length, 8);
+            
+            list.innerHTML = highscores.slice(0, displayCount).map((entry, index) => `
                 <div class="highscore-entry ${index === 0 ? 'rank-1' : ''}">
                     <div class="highscore-row">
                         <div class="rank">${index + 1}</div>
@@ -2973,11 +2975,12 @@
                 return;
             }
             
-            // Versuche Level-Datei zu laden
+            // Versuche Level-Datei von GitHub Pages /levels/ zu laden
             const levelFile = `level_${String(levelNum).padStart(2, '0')}.json`;
-            console.log(`📁 Versuche ${levelFile} zu laden...`);
+            const levelUrl = `https://shrekiii.github.io/Diamond-Digger-Extreme/levels/${levelFile}`;
+            console.log(`📁 Versuche ${levelFile} von GitHub Pages zu laden...`);
             
-            fetch(levelFile)
+            fetch(levelUrl)
                 .then(response => {
                     if (!response.ok) throw new Error('Level nicht gefunden');
                     return response.json();
