@@ -44,6 +44,21 @@
       "wall",
       "earth",
       "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
       "earth",
       "earth",
       "earth",
@@ -58,13 +73,13 @@
       "wall",
       "wall",
       "earth",
+      "earth",
       "empty",
       "empty",
       "empty",
       "empty",
       "empty",
-      "empty",
-      "empty",
+      "earth",
       "earth",
       "wall",
       "wall"
@@ -73,13 +88,13 @@
       "wall",
       "wall",
       "earth",
+      "earth",
       "empty",
       "empty",
       "empty",
       "empty",
       "empty",
-      "empty",
-      "empty",
+      "earth",
       "earth",
       "wall",
       "wall"
@@ -88,13 +103,13 @@
       "wall",
       "wall",
       "earth",
+      "earth",
       "empty",
       "empty",
       "empty",
       "empty",
       "empty",
-      "empty",
-      "empty",
+      "earth",
       "earth",
       "wall",
       "wall"
@@ -103,28 +118,13 @@
       "wall",
       "wall",
       "earth",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
       "earth",
-      "wall",
-      "wall"
-    ],
-    [
-      "wall",
-      "wall",
       "earth",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
       "earth",
       "wall",
       "wall"
@@ -191,7 +191,28 @@
     ]
   ],
   "objects": {
-    "stones": [],
+    "stones": [
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      }
+    ],
     "diamonds": [],
     "monsters": [
       {
