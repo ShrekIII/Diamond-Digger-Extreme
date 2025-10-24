@@ -2560,15 +2560,15 @@
                 return;
             }
             
-            // Lade Custom Level
-            const levelData = customLevels[levelNumber - 1];
+            // Lade Custom Level (0-basiert: Level 0 = customLevels[0])
+            const levelData = customLevels[levelNumber];
             if (!levelData) {
                 console.error('❌ Level nicht gefunden:', levelNumber);
                 console.log('📊 Verfügbare Level:', customLevels.length);
                 console.log('📋 Level Array:', customLevels);
                 
                 // Wenn kein weiteres Level existiert, zeige Completion Screen
-                if (levelNumber > customLevels.length) {
+                if (levelNumber >= customLevels.length) {
                     console.log('🎉 Alle Level abgeschlossen!');
                     showCompletionScreen();
                 } else {
