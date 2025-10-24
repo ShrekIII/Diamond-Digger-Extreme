@@ -2919,13 +2919,8 @@
         
         // Neue Funktion: Level von GitHub laden
         function loadLevelFromGitHub(levelNum) {
-            // Level 0 = Level_00.json
-            // Level 1 = level_01.json (kleingeschrieben!)
-            // Level 2 = level_02.json
-            // Level 3 = level_03.json
-            const levelFile = levelNum === 0 
-                ? 'Level_00.json'  // Großes L für Level 0
-                : `level_${String(levelNum).padStart(2, '0')}.json`;  // Kleines l für Level 1-3
+            // Alle Level nutzen jetzt kleingeschrieben: level_00.json, level_01.json, etc.
+            const levelFile = `level_${String(levelNum).padStart(2, '0')}.json`;
             
             const levelUrl = `${LEVELS_URL}${levelFile}`;
             console.log(`📁 Lade: ${levelUrl}`);
