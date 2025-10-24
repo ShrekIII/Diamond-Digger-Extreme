@@ -2914,7 +2914,8 @@
             console.log('📥 Lade Level 0 von GitHub...');
             loadLevelFromGitHub(0);
             
-            requestAnimationFrame(gameLoop);
+            // Game Loop wird in loadLevelFromGitHub gestartet!
+            // requestAnimationFrame(gameLoop); ← ENTFERNT!
         }
         
         // Neue Funktion: Level von GitHub laden
@@ -2935,6 +2936,12 @@
                     customLevels[levelNum] = levelData;
                     usingCustomLevels = true;
                     loadLevel(levelNum);
+                    
+                    // Starte Game Loop beim ersten Level (Level 0)
+                    if (levelNum === 0) {
+                        console.log('🎮 Starte Game Loop');
+                        requestAnimationFrame(gameLoop);
+                    }
                 })
                 .catch(error => {
                     console.error(`❌ Fehler beim Laden von Level ${levelNum}:`, error);
