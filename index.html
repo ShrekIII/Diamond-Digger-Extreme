@@ -539,18 +539,9 @@
         let totalDiamondsCollectedAllTime = 0;
         let currentLevel = 0;  // Startet jetzt mit Level 0
         let maxLevel = 3; // Level 0-3 verfügbar (4 Level total)
-        // Hier werden die geladenen Level gespeichert - Level 0-3 sind bereits eingebettet!
-        let customLevels = [
-            // LEVEL 0 - Tutorial (KEIN EXIT!)
-            {"name":"Level_0","width":13,"height":12,"requiredDiamonds":5,"playerStart":{"x":2,"y":2},"exit":null,"tiles":[["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]],"objects":{"stones":[],"diamonds":[],"monsters":[{"type":"diamond","x":7,"y":4}]}}
-            // LEVEL 1 - Eingebettet (funktioniert IMMER)
-            ,{"name":"Level 1","width":20,"height":20,"playerStart":{"x":2,"y":2},"exit":{"x":17,"y":16},"tiles":[["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","empty","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","empty","empty","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","empty","empty","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","empty","empty","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","empty","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]],"objects":{"stones":[],"diamonds":[{"x":4,"y":2},{"x":6,"y":4},{"x":6,"y":5},{"x":8,"y":6},{"x":8,"y":7},{"x":8,"y":8},{"x":10,"y":9},{"x":11,"y":9},{"x":11,"y":10},{"x":10,"y":10},{"x":13,"y":11},{"x":13,"y":12},{"x":13,"y":13},{"x":13,"y":14},{"x":14,"y":11}],"monsters":[]},"requiredDiamonds":15}
-            // LEVEL 2 - Steine Challenge
-            ,{"name":"Level 2 - Steine","width":20,"height":20,"playerStart":{"x":2,"y":2},"exit":{"x":17,"y":16},"tiles":[["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]],"objects":{"stones":[{"x":3,"y":2},{"x":4,"y":2},{"x":5,"y":2},{"x":6,"y":2},{"x":7,"y":2},{"x":8,"y":2},{"x":9,"y":2},{"x":10,"y":2},{"x":11,"y":2},{"x":12,"y":2},{"x":13,"y":2},{"x":14,"y":2},{"x":15,"y":2},{"x":14,"y":4},{"x":13,"y":4},{"x":12,"y":4},{"x":11,"y":4},{"x":10,"y":4},{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4},{"x":5,"y":4},{"x":4,"y":4},{"x":3,"y":4},{"x":15,"y":4},{"x":16,"y":4},{"x":17,"y":4},{"x":16,"y":2},{"x":3,"y":6},{"x":4,"y":6},{"x":5,"y":6},{"x":6,"y":6},{"x":7,"y":6},{"x":8,"y":6},{"x":9,"y":6},{"x":10,"y":6},{"x":11,"y":6},{"x":12,"y":6},{"x":13,"y":6},{"x":14,"y":6},{"x":15,"y":6},{"x":16,"y":6},{"x":17,"y":6},{"x":3,"y":8},{"x":4,"y":8},{"x":5,"y":8},{"x":6,"y":8},{"x":7,"y":8},{"x":8,"y":8},{"x":9,"y":8},{"x":10,"y":8},{"x":11,"y":8},{"x":12,"y":8},{"x":13,"y":8},{"x":14,"y":8},{"x":15,"y":8},{"x":16,"y":8},{"x":17,"y":8},{"x":3,"y":10},{"x":4,"y":10},{"x":5,"y":10},{"x":6,"y":10},{"x":7,"y":10},{"x":8,"y":10},{"x":9,"y":10},{"x":10,"y":10},{"x":11,"y":10},{"x":12,"y":10},{"x":13,"y":10},{"x":14,"y":10},{"x":15,"y":10},{"x":16,"y":10},{"x":17,"y":10},{"x":4,"y":12},{"x":3,"y":12},{"x":2,"y":12},{"x":5,"y":12},{"x":6,"y":12},{"x":7,"y":12},{"x":8,"y":12},{"x":9,"y":12},{"x":10,"y":12},{"x":11,"y":12},{"x":12,"y":12},{"x":13,"y":12},{"x":14,"y":12},{"x":15,"y":12},{"x":16,"y":12}],"diamonds":[{"x":16,"y":14},{"x":15,"y":14},{"x":14,"y":14},{"x":13,"y":14},{"x":12,"y":14},{"x":11,"y":14},{"x":10,"y":14},{"x":9,"y":14},{"x":8,"y":14},{"x":7,"y":14},{"x":6,"y":14},{"x":5,"y":14},{"x":4,"y":14},{"x":3,"y":14},{"x":2,"y":14},{"x":5,"y":15},{"x":6,"y":15},{"x":7,"y":15},{"x":8,"y":15},{"x":9,"y":15},{"x":10,"y":15},{"x":11,"y":15},{"x":12,"y":15},{"x":13,"y":15},{"x":14,"y":15},{"x":15,"y":15},{"x":16,"y":15},{"x":16,"y":16},{"x":15,"y":16},{"x":14,"y":16},{"x":13,"y":16},{"x":12,"y":16},{"x":11,"y":16},{"x":10,"y":16},{"x":9,"y":16},{"x":8,"y":16},{"x":7,"y":16},{"x":6,"y":16},{"x":5,"y":16},{"x":4,"y":16},{"x":4,"y":15},{"x":3,"y":15},{"x":2,"y":15},{"x":2,"y":16},{"x":3,"y":16}],"monsters":[]},"requiredDiamonds":45}
-            // LEVEL 3 - Monster Intro
-            ,{"name":"Level 3 - Monster","width":20,"height":20,"playerStart":{"x":2,"y":2},"exit":{"x":2,"y":12},"tiles":[["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","empty","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","empty","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","earth","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","earth","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","earth","wall","wall"],["wall","wall","empty","earth","earth","earth","earth","earth","empty","empty","empty","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","earth","earth","earth","earth","earth","earth","empty","empty","empty","earth","earth","earth","earth","earth","earth","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","earth","earth","empty","empty","empty","earth","earth","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","earth","earth","earth","earth","earth","earth","earth","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","empty","empty","empty","empty","earth","earth","earth","earth","earth","earth","earth","empty","empty","empty","empty","earth","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]],"objects":{"stones":[{"x":5,"y":2},{"x":9,"y":2}],"diamonds":[{"x":13,"y":2},{"x":14,"y":16},{"x":14,"y":15},{"x":14,"y":14},{"x":13,"y":14},{"x":13,"y":15},{"x":13,"y":16},{"x":2,"y":14},{"x":3,"y":14},{"x":4,"y":14},{"x":4,"y":15},{"x":3,"y":15},{"x":2,"y":15},{"x":2,"y":16},{"x":3,"y":16},{"x":4,"y":16},{"x":8,"y":12},{"x":9,"y":12},{"x":10,"y":12},{"x":10,"y":13},{"x":9,"y":13},{"x":8,"y":13},{"x":8,"y":14},{"x":9,"y":14},{"x":10,"y":14},{"x":15,"y":14},{"x":15,"y":15},{"x":15,"y":16},{"x":5,"y":14},{"x":5,"y":15},{"x":5,"y":16},{"x":16,"y":14},{"x":16,"y":15},{"x":16,"y":16}],"monsters":[{"type":"diamond","x":5,"y":7},{"type":"tnt","x":9,"y":7},{"type":"diamond","x":13,"y":7}]},"requiredDiamonds":34}
-        ];
-        let usingCustomLevels = true; // Startet jetzt immer mit Level-Dateien
+        // Hier werden die geladenen Level gespeichert - Alle werden von GitHub geladen!
+        let customLevels = [];  // Leer - Level werden dynamisch geladen
+        let usingCustomLevels = true;  // Nutzt immer externe Level-Dateien
         let gameCompleted = false;
         let finalStats = {
             totalDiamondsCollected: 0,
@@ -2316,7 +2307,14 @@
             timerDisplay.style.fontWeight = 'normal';
             
             if (usingCustomLevels) {
-                loadLevel(currentLevel);
+                // Prüfe ob Level schon geladen ist
+                if (customLevels[currentLevel]) {
+                    console.log(`✅ Level ${currentLevel} bereits im Cache`);
+                    loadLevel(currentLevel);
+                } else {
+                    console.log(`📥 Lade Level ${currentLevel} von GitHub...`);
+                    loadLevelFromGitHub(currentLevel);
+                }
             } else {
                 // Prozedural generierte Level
                 player.x = Math.floor(WORLD_WIDTH / 2) * GRID_SIZE + GRID_SIZE / 2;
@@ -2909,27 +2907,45 @@
             hideMenu();
             resetGameStats();
             currentLevel = 0;  // Startet mit Level 0!
-            gameOver = false;  // Reset Game Over Zustand
-            highscoreChecked = false;  // Reset Highscore Check
+            gameOver = false;
+            highscoreChecked = false;
             
-            // Level 0 ist jetzt in customLevels[0] eingebettet!
-            console.log('📦 Level 0 vorhanden:', customLevels[0] ? 'JA' : 'NEIN');
-            
-            if (customLevels[0]) {
-                usingCustomLevels = true;
-                loadLevel(0);  // Lade Level 0!
-                console.log('✅ Level 1 geladen');
-                console.log('   Spieler:', player.x, player.y);
-                console.log('   Wände:', walls.length);
-                console.log('   Diamanten:', diamonds.length);
-                console.log('   Total benötigt:', totalDiamonds);
-            } else {
-                console.error('❌ Level 1 nicht gefunden!');
-                alert('Fehler: Level 1 fehlt im Code!');
-                showMenu();
-            }
+            // Lade Level 0 von GitHub
+            console.log('📥 Lade Level 0 von GitHub...');
+            loadLevelFromGitHub(0);
             
             requestAnimationFrame(gameLoop);
+        }
+        
+        // Neue Funktion: Level von GitHub laden
+        function loadLevelFromGitHub(levelNum) {
+            // Level 0 = Level_00.json
+            // Level 1 = level_01.json (kleingeschrieben!)
+            // Level 2 = level_02.json
+            // Level 3 = level_03.json
+            const levelFile = levelNum === 0 
+                ? 'Level_00.json'  // Großes L für Level 0
+                : `level_${String(levelNum).padStart(2, '0')}.json`;  // Kleines l für Level 1-3
+            
+            const levelUrl = `${LEVELS_URL}${levelFile}`;
+            console.log(`📁 Lade: ${levelUrl}`);
+            
+            fetch(levelUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Level nicht gefunden');
+                    return response.json();
+                })
+                .then(levelData => {
+                    console.log(`✅ Level ${levelNum} geladen von GitHub`);
+                    customLevels[levelNum] = levelData;
+                    usingCustomLevels = true;
+                    loadLevel(levelNum);
+                })
+                .catch(error => {
+                    console.error(`❌ Fehler beim Laden von Level ${levelNum}:`, error);
+                    alert(`Level ${levelNum} konnte nicht geladen werden!\nURL: ${levelUrl}\n\nBitte prüfen ob Datei existiert.`);
+                    showMenu();
+                });
         }
         
         function loadCustomLevelsFromMenu() {
