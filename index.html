@@ -1619,11 +1619,20 @@
                     
                     // Spezielle Bewegungslogik für "diamond" Monster
                     if (monster.type === 'diamond') {
-                        newX = newY = undefined; // Wird in moveAlongWall gesetzt
                         const move = moveAlongWall(monster);
                         if (move) {
                             newX = move.x;
                             newY = move.y;
+                            // Diamond Monster: Position direkt setzen (moveAlongWall prüft bereits alles)
+                            monster.gridX = newX;
+                            monster.gridY = newY;
+                            
+                            // Prüfe Kollision mit Spieler
+                            if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
+                                gameOver = true;
+                                gameOverReason = '👾 Von einem Monster erwischt!';
+                            }
+                            return; // Fertig mit diesem Monster
                         } else {
                             return; // Keine Bewegung möglich
                         }
