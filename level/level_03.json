@@ -1,0 +1,623 @@
+{
+  "name": "Mein Level",
+  "width": 20,
+  "height": 20,
+  "playerStart": {
+    "x": 2,
+    "y": 2
+  },
+  "exit": {
+    "x": 2,
+    "y": 12
+  },
+  "tiles": [
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall"
+    ],
+    [
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall"
+    ]
+  ],
+  "objects": {
+    "stones": [
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 9,
+        "y": 2
+      }
+    ],
+    "diamonds": [
+      {
+        "x": 13,
+        "y": 2
+      },
+      {
+        "x": 14,
+        "y": 16
+      },
+      {
+        "x": 14,
+        "y": 15
+      },
+      {
+        "x": 14,
+        "y": 14
+      },
+      {
+        "x": 13,
+        "y": 14
+      },
+      {
+        "x": 13,
+        "y": 15
+      },
+      {
+        "x": 13,
+        "y": 16
+      },
+      {
+        "x": 2,
+        "y": 14
+      },
+      {
+        "x": 3,
+        "y": 14
+      },
+      {
+        "x": 4,
+        "y": 14
+      },
+      {
+        "x": 4,
+        "y": 15
+      },
+      {
+        "x": 3,
+        "y": 15
+      },
+      {
+        "x": 2,
+        "y": 15
+      },
+      {
+        "x": 2,
+        "y": 16
+      },
+      {
+        "x": 3,
+        "y": 16
+      },
+      {
+        "x": 4,
+        "y": 16
+      },
+      {
+        "x": 8,
+        "y": 12
+      },
+      {
+        "x": 9,
+        "y": 12
+      },
+      {
+        "x": 10,
+        "y": 12
+      },
+      {
+        "x": 10,
+        "y": 13
+      },
+      {
+        "x": 9,
+        "y": 13
+      },
+      {
+        "x": 8,
+        "y": 13
+      },
+      {
+        "x": 8,
+        "y": 14
+      },
+      {
+        "x": 9,
+        "y": 14
+      },
+      {
+        "x": 10,
+        "y": 14
+      },
+      {
+        "x": 15,
+        "y": 14
+      },
+      {
+        "x": 15,
+        "y": 15
+      },
+      {
+        "x": 15,
+        "y": 16
+      },
+      {
+        "x": 5,
+        "y": 14
+      },
+      {
+        "x": 5,
+        "y": 15
+      },
+      {
+        "x": 5,
+        "y": 16
+      },
+      {
+        "x": 16,
+        "y": 14
+      },
+      {
+        "x": 16,
+        "y": 15
+      },
+      {
+        "x": 16,
+        "y": 16
+      }
+    ],
+    "monsters": [
+      {
+        "type": "diamond",
+        "x": 5,
+        "y": 7
+      },
+      {
+        "type": "tnt",
+        "x": 9,
+        "y": 7
+      },
+      {
+        "type": "diamond",
+        "x": 13,
+        "y": 7
+      }
+    ]
+  },
+  "requiredDiamonds": 52
+}
