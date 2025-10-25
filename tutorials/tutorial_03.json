@@ -1,0 +1,444 @@
+{
+  "name": "use of exploding monsters",
+  "width": 15,
+  "height": 15,
+  "playerStart": {
+    "x": 2,
+    "y": 2
+  },
+  "exit": {
+    "x": 7,
+    "y": 7
+  },
+  "tiles": [
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "wall",
+      "empty",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ]
+  ],
+  "objects": {
+    "stones": [
+      {
+        "x": 9,
+        "y": 3
+      }
+    ],
+    "diamonds": [
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      },
+      {
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x": 10,
+        "y": 2
+      },
+      {
+        "x": 11,
+        "y": 2
+      },
+      {
+        "x": 12,
+        "y": 2
+      },
+      {
+        "x": 12,
+        "y": 3
+      },
+      {
+        "x": 12,
+        "y": 4
+      },
+      {
+        "x": 12,
+        "y": 5
+      },
+      {
+        "x": 12,
+        "y": 6
+      },
+      {
+        "x": 12,
+        "y": 7
+      },
+      {
+        "x": 12,
+        "y": 8
+      },
+      {
+        "x": 12,
+        "y": 9
+      },
+      {
+        "x": 12,
+        "y": 10
+      },
+      {
+        "x": 12,
+        "y": 11
+      },
+      {
+        "x": 12,
+        "y": 12
+      },
+      {
+        "x": 11,
+        "y": 12
+      },
+      {
+        "x": 10,
+        "y": 12
+      },
+      {
+        "x": 9,
+        "y": 12
+      },
+      {
+        "x": 8,
+        "y": 12
+      },
+      {
+        "x": 7,
+        "y": 12
+      },
+      {
+        "x": 6,
+        "y": 12
+      },
+      {
+        "x": 5,
+        "y": 12
+      },
+      {
+        "x": 4,
+        "y": 12
+      },
+      {
+        "x": 3,
+        "y": 12
+      },
+      {
+        "x": 2,
+        "y": 12
+      },
+      {
+        "x": 2,
+        "y": 11
+      },
+      {
+        "x": 2,
+        "y": 10
+      },
+      {
+        "x": 2,
+        "y": 9
+      },
+      {
+        "x": 2,
+        "y": 8
+      },
+      {
+        "x": 2,
+        "y": 7
+      },
+      {
+        "x": 2,
+        "y": 6
+      },
+      {
+        "x": 2,
+        "y": 5
+      },
+      {
+        "x": 2,
+        "y": 4
+      },
+      {
+        "x": 2,
+        "y": 3
+      }
+    ],
+    "monsters": [
+      {
+        "type": "tnt",
+        "x": 5,
+        "y": 9
+      }
+    ]
+  },
+  "requiredDiamonds": 39
+}

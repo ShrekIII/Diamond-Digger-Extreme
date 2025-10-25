@@ -415,6 +415,7 @@
                 <h1 class="game-title">⛏️ TUNNEL GRABER ⛏️</h1>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
+                    <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
                     <button class="menu-btn" onclick="loadCustomLevelsFromMenu()">📂 Level Laden</button>
                 </div>
             </div>
@@ -434,7 +435,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.6.7</div>
+        <div class="version-badge">v1.7.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -559,6 +560,8 @@
         // Hier werden die geladenen Level gespeichert - Alle werden von GitHub geladen!
         let customLevels = [];  // Leer - Level werden dynamisch geladen
         let usingCustomLevels = true;  // Nutzt immer externe Level-Dateien
+        let inTutorialMode = false;  // Ist Tutorial aktiv?
+        let tutorialLevels = [];  // Tutorial-Level
         let gameCompleted = false;
         let finalStats = {
             totalDiamondsCollected: 0,
@@ -2518,13 +2521,25 @@
             timerDisplay.style.fontWeight = 'normal';
             
             if (usingCustomLevels) {
-                // Prüfe ob Level schon geladen ist
-                if (customLevels[currentLevel]) {
-                    console.log(`✅ Level ${currentLevel} bereits im Cache`);
-                    loadLevel(currentLevel);
+                if (inTutorialMode) {
+                    // Tutorial-Modus: Lade Tutorial-Level
+                    const tutorialNum = currentLevel + 1;  // Tutorial 1-5
+                    if (tutorialLevels[currentLevel]) {
+                        console.log(`✅ Tutorial ${tutorialNum} bereits im Cache`);
+                        loadLevel(currentLevel);
+                    } else {
+                        console.log(`📥 Lade Tutorial ${tutorialNum} von GitHub...`);
+                        loadTutorialFromGitHub(tutorialNum);
+                    }
                 } else {
-                    console.log(`📥 Lade Level ${currentLevel} von GitHub...`);
-                    loadLevelFromGitHub(currentLevel);
+                    // Normal-Modus: Lade normale Level
+                    if (customLevels[currentLevel]) {
+                        console.log(`✅ Level ${currentLevel} bereits im Cache`);
+                        loadLevel(currentLevel);
+                    } else {
+                        console.log(`📥 Lade Level ${currentLevel} von GitHub...`);
+                        loadLevelFromGitHub(currentLevel);
+                    }
                 }
             } else {
                 // Prozedural generierte Level
@@ -2938,8 +2953,8 @@
             document.getElementById('finalDistance').textContent = Math.round(finalStats.totalDistanceTraveled);
             document.getElementById('finalTime').textContent = Math.round(finalStats.totalTimePlayed / 1000);
             
-            // Prüfe Highscore
-            if (checkHighscore()) {
+            // Prüfe Highscore NUR wenn NICHT im Tutorial-Modus
+            if (!inTutorialMode && checkHighscore()) {
                 // Zeige erst Completion Screen, dann Name Input
                 document.getElementById('completionScreen').classList.add('active');
                 setTimeout(() => {
@@ -3128,6 +3143,7 @@
             currentLevel = 0;  // Startet mit Level 0!
             gameOver = false;
             highscoreChecked = false;
+            inTutorialMode = false;  // Kein Tutorial
             
             // Lade Level 0 von GitHub
             console.log('📥 Lade Level 0 von GitHub...');
@@ -3135,6 +3151,54 @@
             
             // Game Loop wird in loadLevelFromGitHub gestartet!
             // requestAnimationFrame(gameLoop); ← ENTFERNT!
+        }
+        
+        function startTutorial() {
+            console.log('📚 START TUTORIAL');
+            hideMenu();
+            resetGameStats();
+            currentLevel = 0;
+            gameOver = false;
+            highscoreChecked = false;
+            inTutorialMode = true;  // Tutorial-Modus aktiv!
+            tutorialLevels = [];  // Leere Tutorial-Level
+            
+            // Lade Tutorial 01 von GitHub
+            console.log('📥 Lade Tutorial 01 von GitHub...');
+            loadTutorialFromGitHub(1);
+        }
+        
+        // Lade Tutorial-Level von GitHub
+        function loadTutorialFromGitHub(tutorialNum) {
+            const tutorialFile = `tutorial_${String(tutorialNum).padStart(2, '0')}.json`;
+            const tutorialUrl = `https://shrekiii.github.io/Diamond-Digger-Extreme/tutorials/${tutorialFile}`;
+            
+            console.log(`📁 Lade Tutorial: ${tutorialUrl}`);
+            
+            fetch(tutorialUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Tutorial nicht gefunden');
+                    return response.json();
+                })
+                .then(levelData => {
+                    console.log(`✅ Tutorial ${tutorialNum} geladen`);
+                    tutorialLevels[tutorialNum - 1] = levelData;  // 0-basiert
+                    usingCustomLevels = true;
+                    customLevels = tutorialLevels;  // Verwende Tutorial-Level
+                    maxLevel = 4;  // 5 Tutorials (0-4)
+                    loadLevel(tutorialNum - 1);  // Starte bei 0
+                    
+                    if (!gameStarted) {
+                        gameStarted = true;
+                        lastFrameTime = performance.now();
+                        requestAnimationFrame(gameLoop);
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Fehler beim Laden des Tutorials:', error);
+                    alert('Fehler: Tutorial konnte nicht geladen werden!\n' + error.message);
+                    showMenu();
+                });
         }
         
         // Neue Funktion: Level von GitHub laden

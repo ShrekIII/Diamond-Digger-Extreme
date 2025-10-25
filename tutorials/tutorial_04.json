@@ -1,0 +1,386 @@
+{
+  "name": "watch out for traps",
+  "width": 15,
+  "height": 15,
+  "playerStart": {
+    "x": 2,
+    "y": 2
+  },
+  "exit": {
+    "x": 2,
+    "y": 8
+  },
+  "tiles": [
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "earth",
+      "wall",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "wall",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "wall",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "wall",
+      "empty",
+      "earth",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "earth",
+      "wall",
+      "empty",
+      "wall",
+      "earth",
+      "earth",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "earth",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "wall",
+      "earth",
+      "earth",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "earth",
+      "wall",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "empty",
+      "earth",
+      "earth",
+      "wall",
+      "earth",
+      "earth",
+      "empty",
+      "earth",
+      "earth",
+      "wall",
+      "empty",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border",
+      "border"
+    ]
+  ],
+  "objects": {
+    "stones": [
+      {
+        "x": 4,
+        "y": 5
+      },
+      {
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 4
+      }
+    ],
+    "diamonds": [
+      {
+        "x": 2,
+        "y": 11
+      },
+      {
+        "x": 2,
+        "y": 12
+      },
+      {
+        "x": 2,
+        "y": 10
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 4
+      },
+      {
+        "x": 6,
+        "y": 4
+      },
+      {
+        "x": 12,
+        "y": 7
+      },
+      {
+        "x": 12,
+        "y": 12
+      },
+      {
+        "x": 12,
+        "y": 11
+      },
+      {
+        "x": 12,
+        "y": 10
+      },
+      {
+        "x": 4,
+        "y": 9
+      },
+      {
+        "x": 4,
+        "y": 8
+      },
+      {
+        "x": 2,
+        "y": 5
+      },
+      {
+        "x": 2,
+        "y": 6
+      },
+      {
+        "x": 10,
+        "y": 5
+      },
+      {
+        "x": 11,
+        "y": 5
+      },
+      {
+        "x": 12,
+        "y": 5
+      },
+      {
+        "x": 12,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 9
+      },
+      {
+        "x": 8,
+        "y": 12
+      }
+    ],
+    "monsters": []
+  },
+  "requiredDiamonds": 37
+}

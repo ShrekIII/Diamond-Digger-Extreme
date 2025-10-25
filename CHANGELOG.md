@@ -4,6 +4,37 @@
 
 ---
 
+## v1.7.0 (25.10.2025) - Tutorial-System
+
+### ✨ Neue Features:
+- **Tutorial-System:** 5 Tutorial-Level zum Lernen
+- **Tutorial-Button** im Hauptmenü (📚 Tutorial Starten)
+- Tutorials werden von GitHub geladen
+- Keine Highscore-Einträge im Tutorial-Modus
+
+### 📁 Neue Struktur:
+- `/tutorials/` Verzeichnis erstellt
+- `tutorial_01.json` - Collect Diamonds
+- `tutorial_02.json` - Learn the Physics of Rocks
+- `tutorial_03.json` - Use of Exploding Monsters
+- `tutorial_04.json` - Watch Out for Traps
+- `tutorial_05.json` - Learn About Magic Walls
+
+### 📝 Änderungen:
+- `inTutorialMode` Variable für Tutorial-Status
+- `tutorialLevels` Array für Tutorial-Level
+- `startTutorial()` lädt Tutorial 01 von GitHub
+- `loadTutorialFromGitHub()` lädt Tutorial-Level
+- `nextLevel()` unterscheidet Tutorial/Normal-Modus
+- `showCompletionScreen()` prüft Tutorial-Modus
+
+### 🎯 Verhalten:
+- Tutorial-Button → Startet Tutorial 01
+- Nach Tutorial-Abschluss: Kein Highscore-Eintrag
+- Tutorial-Level: URLs von `/tutorials/tutorial_XX.json`
+
+---
+
 ## v1.6.7 (25.10.2025) - Editor-Fixes & Magische Wand
 
 ### ✨ Neue Features:
@@ -281,14 +312,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.6.7
-**Debug:** v1.6.7-debug
+**Stabil:** v1.7.0
+**Debug:** v1.7.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.7
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.7-debug
-- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.7
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.7
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.7.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.7.0-debug
+- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.7.0
 
 ---
 
