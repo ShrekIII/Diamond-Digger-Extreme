@@ -434,7 +434,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.6.1</div>
+        <div class="version-badge">v1.6.2</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -769,7 +769,7 @@
             }
             
             // Bei prozeduralen Levels: Harte Grenzen
-            if (gridY <= 4 || gridY >= WORLD_HEIGHT - 3) return true;
+            if (gridY <= 4 || gridY >= WORLD_HEIGHT - 2) return true;
             if (gridX <= 1 || gridX >= WORLD_WIDTH - 2) return true;
             return false;
         }
@@ -1055,7 +1055,7 @@
                     
                     // Prüfe ob Stein auf Erde oder Begrenzung trifft
                     const hitsGround = !tunnel.has(belowKey) && !freeFields.has(belowKey);
-                    const hitsBoundary = belowGridY >= WORLD_HEIGHT - 3;
+                    const hitsBoundary = belowGridY >= WORLD_HEIGHT - 2;
                     const hitsWall = isWallAt(obstacle.gridX, belowGridY);
                     const hitsObstacle = obstacles.some(o => 
                         o !== obstacle && o.gridX === obstacle.gridX && o.gridY === belowGridY
@@ -1121,7 +1121,7 @@
                     
                     const isEmpty = (tunnel.has(belowKey) || freeFields.has(belowKey)) && 
                                     !hasObstacleBelow && !hasDiamondBelow && !hasPlayerBelow && !hasWallBelow && !hasExitBelow &&
-                                    belowGridY < WORLD_HEIGHT - 3;
+                                    belowGridY < WORLD_HEIGHT - 2;
                     
                     if (isEmpty) {
                         // Starte oder erhöhe Verzögerung
@@ -1264,7 +1264,7 @@
                     
                     // Prüfe ob Diamant auf Erde oder Begrenzung trifft
                     const hitsGround = !tunnel.has(belowKey) && !freeFields.has(belowKey);
-                    const hitsBoundary = belowGridY >= WORLD_HEIGHT - 3;
+                    const hitsBoundary = belowGridY >= WORLD_HEIGHT - 2;
                     const hitsWall = isWallAt(diamond.gridX, belowGridY);
                     const hitsObstacle = obstacles.some(o => 
                         o.gridX === diamond.gridX && o.gridY === belowGridY
@@ -1330,7 +1330,7 @@
                     
                     const isEmpty = (tunnel.has(belowKey) || freeFields.has(belowKey)) && 
                                     !hasObstacleBelow && !hasDiamondBelow && !hasPlayerBelow && !hasWallBelow && !hasExitBelow &&
-                                    belowGridY < WORLD_HEIGHT - 3;
+                                    belowGridY < WORLD_HEIGHT - 2;
                     
                     if (isEmpty) {
                         // Starte oder erhöhe Verzögerung
@@ -2133,7 +2133,7 @@
                     
                     // Prüfe ob Position im Spielfeld ist
                     if (!isInWall(targetX, targetY) && !isWallAt(targetX, targetY) && 
-                        targetX >= 2 && targetX < WORLD_WIDTH - 2 && targetY >= 2 && targetY < WORLD_HEIGHT - 3) {
+                        targetX >= 2 && targetX < WORLD_WIDTH - 2 && targetY >= 2 && targetY < WORLD_HEIGHT - 2) {
                         
                         // PRIORITÄT 1: Prüfe ob ein Stein dort ist (nur horizontal schiebbar)
                         if (dx !== 0) {

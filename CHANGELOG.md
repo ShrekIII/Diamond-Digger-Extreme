@@ -1,132 +1,181 @@
-# 📜 CHANGELOG
+# 📋 CHANGELOG - DIAMOND DIGGER EXTREME
 
-Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
-
-Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
+## Versionshistorie
 
 ---
 
-## [1.0.0] - 2025-01-XX
+## v1.6.2 (25.10.2025) - Wand-Grenze Fix
 
-### 🎉 Erste vollständige Version!
+### 🐛 Bug Fix:
+- **Untere Wand-Grenze von 3 auf 2 Felder reduziert**
+- Konsistenz mit anderen Rändern (alle jetzt 2 Felder breit/hoch)
+- Betrifft: prozedurale Level-Generierung
 
-#### ✨ Hinzugefügt
-- **Vollständiges Menü-System**
-  - Hauptmenü mit Menu.png Hintergrund
-  - "Spiel Starten" Button
-  - "Level Editor" Button
-  - Highscore-Liste (Top 10)
+### 📝 Änderungen:
+- `WORLD_HEIGHT - 3` → `WORLD_HEIGHT - 2` (6 Stellen)
+- isInWall(): Untere Grenze korrigiert
+- Fallende Steine: Boundary-Check korrigiert
+- Fallende Diamanten: Boundary-Check korrigiert
+- Spieler-Bewegung: Grenze korrigiert
 
-- **Highscore-System**
-  - Automatischer Highscore-Check bei Game Over
-  - Automatischer Highscore-Check bei Level-Completion
-  - Name-Eingabe Dialog
-  - LocalStorage Persistenz
-  - Beispiel-Highscores beim ersten Start
-  - Sortierung: Diamanten → Level → Zeit → Distanz
-  - Automatische Migration alter Daten
-
-- **Automatisches Level-System**
-  - Level laden automatisch von GitHub
-  - Fallback auf lokale Dateien
-  - Manueller Upload-Dialog als letzte Option
-  - Level-Caching für wiederholtes Spielen
-  - 3 voll funktionsfähige Level
-
-- **Level-Editor Integration**
-  - Button im Hauptmenü
-  - Öffnet in neuem Tab
-  - Vollständiger visueller Editor
-
-- **Game Over Screen**
-  - Zwei Buttons: "Neustart" und "Menü"
-  - Highscore-Check
-  - Statistik-Anzeige
-
-- **Completion Screen**
-  - Erscheint nach allen Levels
-  - Final-Statistiken
-  - Zwei Buttons: "Neu Starten" und "Zurück zum Menü"
-
-#### 🎮 Spielmechanik
-- Spieler kann sich durch Erde graben
-- Steine fallen realistisch
-- Diamanten fallen wie Steine
-- 2 Monster-Typen:
-  - Diamant-Monster (erzeugt Diamant bei Tod)
-  - TNT-Monster (explodiert bei Tod)
-- Abbaubare Mauern (3 Treffer mit Schaufel)
-- Timer-System: 60s + 10s pro Level
-- Ausgang öffnet sich bei genug Diamanten
-- Kamera folgt Spieler
-
-#### 📁 Projekt-Struktur
-- `index.html` - Hauptspiel
-- `level_editor.html` - Level-Editor
-- `level/` - Level-Dateien (level_01.json bis level_03.json)
-- `img/` - Bilder (Menu.png)
-- `docs/` - Dokumentation
-
-#### 📖 Dokumentation
-- README.md - Haupt-Dokumentation
-- CONTRIBUTING.md - Mitwirkungs-Guide
-- LICENSE - MIT Lizenz
-- docs/README_GITHUB.md - GitHub-spezifische Anleitung
-- docs/SCHNELLSTART.md - Schnellstart-Guide
-- docs/INSTALLATION.md - Installations-Checkliste
-
-#### 🌐 GitHub Pages
-- Spiel direkt spielbar unter GitHub Pages URL
-- Automatisches Laden aller Assets von GitHub
+### 🎯 Betroffene Bereiche:
+- Level-Generierung (mehr spielbare Fläche)
+- Stein-Physik (korrekter Boundary-Check)
+- Diamant-Physik (korrekter Boundary-Check)
+- Spieler-Bewegung (kann bis 2 Felder vom Rand)
 
 ---
 
-## [Unreleased] - Geplante Features
+## v1.6.1 (25.10.2025) - isObject Fix
 
-### 🔮 In Planung für v1.1.0
+### 🐛 Kritischer Bug Fix:
+- **Diamond Monster Bewegung repariert**
+- `isWallOrEarth()` → `isObject()` (prüft ALLE Objekte)
+- `hasWallNeighbor()` → `hasObjectNeighbor()`
+- Monster bewegen sich jetzt entlang Wänden, Erde, Steinen, Diamanten, etc.
 
-#### Features
-- [ ] Pause-Menü (ESC-Taste)
-- [ ] Sound-Effekte
-- [ ] Partikel-Effekte beim Graben
-- [ ] Gamepad-Support
-- [ ] Touch-Steuerung für Mobile
-- [ ] Mehrsprachigkeit (EN/DE)
-- [ ] Mehr Level (4-10)
+### 📝 Änderungen:
+- Funktion `isObject()` implementiert (prüft 7 Objekttypen)
+- Funktion `hasObjectNeighbor()` verwendet `isObject()`
+- Version Badge hinzugefügt (unten rechts im Menu)
 
-#### Verbesserungen
-- [ ] Bessere Grafiken
-- [ ] Animationen
-- [ ] Level-Vorschau vor dem Start
-- [ ] Schwierigkeitsgrade
-- [ ] Achievements-System
-- [ ] Globale Online-Highscores
-
-#### Bugfixes
-- [ ] Performance-Optimierung bei vielen Objekten
-- [ ] Browser-Kompatibilität verbessern
+### 📁 Dateien:
+- `index.html` - Hauptspiel v1.6.1
+- `tunnel_game_debug.html` - Debug-Version v1.6.1-debug
 
 ---
 
-## Versionsformat
+## v1.6.0.2 (24.10.2025) - Position Fix
 
-- **MAJOR** - Grundlegende Änderungen, Breaking Changes
-- **MINOR** - Neue Features, abwärtskompatibel
-- **PATCH** - Bugfixes, kleine Verbesserungen
+### 🐛 Bug Fix:
+- Diamond Monster Position wird jetzt korrekt gesetzt
+- `monster.gridX/Y` wird direkt nach `moveAlongWall()` aktualisiert
+- `return` nach Bewegung verhindert weitere Prüfungen
 
-Aktuelles Format: `[MAJOR].[MINOR].[PATCH]`
-
----
-
-## Kategorien
-
-- **✨ Hinzugefügt** - Neue Features
-- **🔄 Geändert** - Änderungen an bestehenden Features
-- **❌ Entfernt** - Entfernte Features
-- **🐛 Bugfixes** - Behobene Fehler
-- **🔒 Sicherheit** - Sicherheits-Patches
-- **📝 Dokumentation** - Docs-Änderungen
+### 📝 Änderungen:
+- Diamond Monster Logik überarbeitet
+- Position-Update direkt in updateMonsters()
+- Spieler-Kollision geprüft
 
 ---
 
-[1.0.0]: https://github.com/ShrekIII/Diamond-Digger/releases/tag/v1.0.0
+## v1.6.0.1 (24.10.2025) - Debug Version
+
+### 🔍 Debug:
+- Ausführliche Console-Logs hinzugefügt
+- Monster-Bewegung debugging
+- moveAlongWall() Logs
+
+### 📝 Änderungen:
+- Logs in updateMonsters()
+- Logs in moveAlongWall()
+- hasWallNeighbor und isEmpty Logs
+
+---
+
+## v1.6.0 (24.10.2025) - Diamond Monster
+
+### ✨ Neue Features:
+- **Diamond Monster Bewegungslogik** (moveAlongWall)
+- 3 Regeln implementiert:
+  1. Vermeide vorheriges Feld
+  2. Bewegung im Uhrzeigersinn
+  3. Entlang Wänden/Erde (später korrigiert zu "alle Objekte")
+
+### 📝 Änderungen:
+- Level_00 mit 5 Steinen
+- Game Loop Timing korrigiert
+- Dynamisches Level-Laden von GitHub
+- 0-basierte Level-Nummerierung
+
+### 🎨 UI:
+- Version Badge im Menu (unten rechts)
+
+---
+
+## v1.5.3 (23.10.2025) - Array Fix
+
+### 🐛 Bug Fix:
+- 0-basierte Level-Nummerierung
+- Array-Index Fehler behoben
+
+---
+
+## v1.5.2 (23.10.2025) - Game Loop
+
+### 🐛 Bug Fix:
+- Game Loop Timing korrigiert
+- requestAnimationFrame optimiert
+
+---
+
+## v1.5.1 (22.10.2025) - Dateinamen
+
+### 📝 Änderungen:
+- Konsistente Dateinamen (level_00.json)
+- Kleinschreibung für alle Level-Dateien
+
+---
+
+## v1.5.0 (22.10.2025) - Dynamic Loading
+
+### ✨ Neue Features:
+- **Dynamisches Level-Laden von GitHub**
+- Level-Cache System
+- Fehlerbehandlung für fehlende Level
+
+### 📝 Änderungen:
+- loadLevelFromGitHub() Funktion
+- LEVELS_URL Konstante
+- Level-Caching in customLevels Object
+
+---
+
+## v1.4.x - Frühere Versionen
+
+### Features:
+- Grundlegendes Gameplay
+- Steine, Diamanten, Monster
+- Highscore-System
+- Level-Editor
+- Menu-System
+
+---
+
+## 📋 VERSIONS-SCHEMA
+
+**Format:** `MAJOR.MINOR.PATCH[-suffix]`
+
+- **MAJOR:** Große Änderungen, Breaking Changes
+- **MINOR:** Neue Features, Verbesserungen
+- **PATCH:** Bug Fixes, kleine Änderungen
+- **Suffix:** `-debug` für Debug-Versionen
+
+**Beispiele:**
+- `v1.6.1` - Release-Version
+- `v1.6.1-debug` - Debug-Version
+- `v2.0.0` - Major Update
+
+---
+
+## 🔄 NÄCHSTE VERSION: v1.6.3
+
+### Geplant:
+- Diamond Monster Bewegungslogik testen
+- Weitere Optimierungen
+
+---
+
+## 📥 AKTUELLE VERSION
+
+**Stabil:** v1.6.2
+**Debug:** v1.6.2-debug
+
+**Download:**
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.2
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.2-debug
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.2
+
+---
+
+**Letzte Aktualisierung:** 25.10.2025
