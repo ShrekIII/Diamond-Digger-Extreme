@@ -434,7 +434,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.6.2</div>
+        <div class="version-badge">v1.6.5</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -577,6 +577,7 @@
         let flashDuration = 500;
         let tunnel = new Set();
         let freeFields = new Set();
+        let levelTiles = []; // Speichert tiles Array von Custom Levels (für border-Erkennung)
         let earthTextures = new Map(); // Speichert Textur und Rotation für jedes Erdfeld: "x,y" -> {texture: 1-6, rotation: 0-3}
         let obstacles = [];
         let walls = []; // Neue Mauern
@@ -685,7 +686,29 @@
         function drawWalls() {
             // Bei Custom Levels: Zeichne nur Wände aus dem Level-JSON
             if (usingCustomLevels) {
-                // Zeichne Wände aus walls Array
+                // Zeichne border-Tiles (unzerstörbare Rand-Wände)
+                if (levelTiles.length > 0) {
+                    for (let y = 0; y < levelTiles.length; y++) {
+                        for (let x = 0; x < levelTiles[y].length; x++) {
+                            if (levelTiles[y][x] === 'border') {
+                                const px = x * GRID_SIZE - camera.x;
+                                const py = y * GRID_SIZE - camera.y;
+                                
+                                if (px + GRID_SIZE >= 0 && px < canvas.width && py + GRID_SIZE >= 0 && py < canvas.height) {
+                                    // Dunkelrot für unzerstörbare Wand
+                                    ctx.fillStyle = '#8B0000';
+                                    ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
+                                    // Hellerer Rand
+                                    ctx.strokeStyle = '#CD5C5C';
+                                    ctx.lineWidth = 2;
+                                    ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Zeichne Wände aus walls Array (zerstörbar)
                 walls.forEach(wall => {
                     const x = wall.gridX * GRID_SIZE - camera.x;
                     const y = wall.gridY * GRID_SIZE - camera.y;
@@ -763,9 +786,13 @@
         }
         
         function isInWall(gridX, gridY) {
-            // Bei Custom Levels: Prüfe gegen walls Array
-            if (usingCustomLevels) {
-                return false; // Custom Levels haben keine harten Grenzen, nur tiles
+            // Bei Custom Levels: Prüfe gegen border tiles
+            if (usingCustomLevels && levelTiles.length > 0) {
+                if (gridY >= 0 && gridY < levelTiles.length && 
+                    gridX >= 0 && gridX < levelTiles[0].length) {
+                    return levelTiles[gridY][gridX] === 'border';
+                }
+                return false; // Außerhalb des Level-Arrays
             }
             
             // Bei prozeduralen Levels: Harte Grenzen
@@ -2754,6 +2781,7 @@
             tunnel = new Set();
             freeFields = new Set();
             walls = [];
+            levelTiles = levelData.tiles; // Speichere tiles für border-Erkennung
             
             for (let y = 0; y < levelData.tiles.length; y++) {
                 for (let x = 0; x < levelData.tiles[y].length; x++) {
@@ -2768,6 +2796,10 @@
                             gridY: y,
                             health: 3
                         });
+                    } else if (tile === 'border') {
+                        // Border = unzerstörbare Wand (wie isInWall)
+                        // Wird in isInWall-Prüfung durch levelTiles Array erkannt
+                        // Keine health, kann nicht zerstört werden
                     }
                     // 'earth' bleibt leer (default)
                 }

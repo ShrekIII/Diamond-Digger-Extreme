@@ -4,6 +4,73 @@
 
 ---
 
+## v1.6.5 (25.10.2025) - Border-Mauern & Level-Editor Fix
+
+### ✨ Neue Features:
+- **Zwei Mauer-Typen:** `wall` (zerstörbar) und `border` (unzerstörbar)
+- **Level-Editor:** Neues "Rand" Tool (🟥) für unzerstörbare Mauern
+- **Visuelle Unterscheidung:** Border-Mauern sind rot, normale Mauern grau
+
+### 🐛 Bug Fixes:
+- **Level-Editor:** Unterer Rand jetzt 2 statt 3 Zeilen (Zeile 425: `levelHeight - 3` → `- 2`)
+- **Level-Editor:** Verwendet `border` statt `wall` für Rand-Generierung
+
+### 📝 Änderungen:
+- **Level-Editor:** `initLevel()` erstellt `border` für Rand
+- **Hauptspiel:** `levelTiles` Variable für border-Tracking
+- **Hauptspiel:** `isInWall()` erkennt border-Tiles
+- **Hauptspiel:** `drawWalls()` rendert border-Tiles (rot)
+- **Hauptspiel:** Border-Tiles sind unzerstörbar (keine health)
+
+### 🎯 Verhalten:
+- Border (🟥): Unzerstörbar, stoppt alles
+- Wall (🧱): Zerstörbar (3 Health), kann durch Explosion zerstört werden
+
+---
+
+## v1.6.4 (25.10.2025) - Level-Dateien Fix
+
+### 🐛 Kritischer Bug Fix:
+- **Alle Level-Dateien korrigiert** (untere Wand-Grenze)
+- level_01.json, level_02.json, level_03.json: 3→2 Wand-Zeilen
+- level_00.json: War bereits korrekt (2 Zeilen)
+
+### 📝 Änderungen:
+- Level 1: Height 20→19, untere Wand-Zeilen 3→2
+- Level 2: Height 20→19, untere Wand-Zeilen 3→2
+- Level 3: Height 20→19, untere Wand-Zeilen 3→2
+- Level 0: Bereits korrekt (Height 11, 2 Wand-Zeilen)
+
+### 🎯 Resultat:
+- ✅ Alle Level haben jetzt 2 Wand-Zeilen unten
+- ✅ Konsistent mit v1.6.2 Code-Fix
+- ✅ 1 zusätzliche Zeile spielbare Fläche pro Level!
+
+### ⚠️ Wichtig:
+- v1.6.2 fixte nur CODE (prozedurale Generierung)
+- v1.6.4 fixt LEVEL-DATEIEN (JSON)
+- **Beide Fixes sind notwendig!**
+
+---
+
+## v1.6.3 (25.10.2025) - Level Editor Version Badge
+
+### ✨ Neue Features:
+- **Version Badge im Level Editor** hinzugefügt
+- Zeigt aktuelle Version unten rechts an
+- Konsistentes Design mit Hauptspiel
+
+### 📝 Änderungen:
+- Level Editor: Version Badge CSS hinzugefügt
+- Level Editor: Badge-Element eingefügt (unten rechts)
+- Version Badge zeigt "v1.6.3"
+
+### 📁 Dateien:
+- `level_editor.html` - Version Badge hinzugefügt
+- `index.html` - Version zu v1.6.3 aktualisiert
+
+---
+
 ## v1.6.2 (25.10.2025) - Wand-Grenze Fix
 
 ### 🐛 Bug Fix:
@@ -158,23 +225,24 @@
 
 ---
 
-## 🔄 NÄCHSTE VERSION: v1.6.3
+## 🔄 NÄCHSTE VERSION: v1.6.5
 
 ### Geplant:
-- Diamond Monster Bewegungslogik testen
+- Diamond Monster Bewegungslogik finalisieren
 - Weitere Optimierungen
 
 ---
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.6.2
-**Debug:** v1.6.2-debug
+**Stabil:** v1.6.5
+**Debug:** v1.6.5-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.2
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.2-debug
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.2
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.5
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.5-debug
+- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.5
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.5
 
 ---
 

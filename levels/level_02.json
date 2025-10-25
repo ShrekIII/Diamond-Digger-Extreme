@@ -1,7 +1,7 @@
 {
   "name": "Mein Level",
   "width": 20,
-  "height": 20,
+  "height": 19,
   "playerStart": {
     "x": 2,
     "y": 2
@@ -382,28 +382,6 @@
       "empty",
       "empty",
       "empty",
-      "wall",
-      "wall"
-    ],
-    [
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
-      "wall",
       "wall",
       "wall"
     ],
