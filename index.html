@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.13.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.14.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
@@ -445,7 +445,7 @@
     </audio>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.13.0</div>
+        <div class="version-badge">v1.14.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -2764,16 +2764,16 @@
                 if (clickX >= button1X && clickX <= button1X + button1Width &&
                     clickY >= button1Y && clickY <= button1Y + button1Height) {
                     // Level wiederholen - OHNE Highscore
-                    console.log('🔄 Level wiederholen - Highscore wird verhindert');
+                    console.log(`🔄 Level wiederholen - Level ${currentLevel}, Tutorial: ${inTutorialMode}`);
                     gameOver = false;
                     highscoreChecked = true;  // Verhindert Highscore-Prüfung!
                     
                     // Lade aktuelles Level neu (ohne currentLevel zu ändern)
                     if (inTutorialMode) {
-                        loadTutorialFromGitHub(currentLevel);
-                    } else if (usingCustomLevels) {
-                        loadLevelByNumber(currentLevel);
+                        // Tutorial: currentLevel ist 1-basiert, loadLevel erwartet 0-basiert
+                        loadLevel(currentLevel - 1);
                     } else {
+                        // Normal/Custom Level: loadLevelByNumber erwartet 1-basiert
                         loadLevelByNumber(currentLevel);
                     }
                     return;
@@ -2919,6 +2919,32 @@
             
             ctx.drawImage(backgroundCanvas, camera.x, camera.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
             
+            // Blink-Effekt während Wartezeit (2 Sekunden am Level-Start)
+            if (!playerCanMove && !gameOver) {
+                const elapsed = currentTime - levelStartTime;
+                // Blinke alle 250ms (4x pro Sekunde)
+                const blinkCycle = Math.floor(elapsed / 250) % 2;
+                if (blinkCycle === 0) {
+                    // Weißer Overlay beim Blinken
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                // Zeige Countdown-Text
+                const remainingSeconds = Math.ceil((2000 - elapsed) / 1000);
+                if (remainingSeconds > 0) {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = 'bold 48px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 4;
+                    const text = `Bereit? ${remainingSeconds}...`;
+                    ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
+                    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+                }
+            }
+            
             drawTunnel();
             drawWalls();
             
@@ -3029,10 +3055,21 @@
         if (menuMusic) {
             menuMusic.volume = 0.2;  // 20% Lautstärke
             
-            // Autoplay-Trick: Audio startet muted, wir unmuten es sofort
-            // Dies funktioniert in den meisten Browsern ohne User-Interaktion
+            // Unmute und explizit play() aufrufen
             menuMusic.muted = false;
-            console.log('🎵 Menü-Musik gestartet (20% Lautstärke, automatisch)');
+            menuMusic.play().then(() => {
+                console.log('🎵 Menü-Musik gestartet (20% Lautstärke, automatisch)');
+            }).catch(err => {
+                console.log('🎵 Autoplay blockiert - versuche bei erster Interaktion');
+                // Fallback: Bei erstem Click/Key starten
+                const startMusic = () => {
+                    menuMusic.play().catch(e => console.log('Musik-Start fehlgeschlagen'));
+                    document.removeEventListener('click', startMusic, { once: true });
+                    document.removeEventListener('keydown', startMusic, { once: true });
+                };
+                document.addEventListener('click', startMusic, { once: true });
+                document.addEventListener('keydown', startMusic, { once: true });
+            });
         }
         
         // Initialisiere Ingame-Musik (15% Lautstärke)

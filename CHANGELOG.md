@@ -4,6 +4,72 @@
 
 ---
 
+## v1.14.0 (25.10.2025) - Bugfixes & Visual Feedback
+
+### 🐛 Bugfixes:
+
+**1. Menü-Musik Autoplay verbessert:**
+- Aggressiverer Ansatz: `play()` + `unmute`
+- Promise-basierte Fehlerbehandlung
+- Fallback bei Autoplay-Blockierung
+- `{ once: true }` für Event-Listener (verhindert Mehrfach-Start)
+
+**2. "Wiederholen" Button Fix:**
+- **Problem**: Lud falsches Level beim Wiederholen
+- **Tutorial**: Verwendet jetzt `loadLevel(currentLevel - 1)` (0-basiert)
+- **Normal**: Verwendet `loadLevelByNumber(currentLevel)` (1-basiert)
+- Console-Log: Zeigt Level-Nummer und Tutorial-Status
+
+**3. Level-Start Blink-Effekt:**
+- Bildschirm blinkt alle 250ms während Wartezeit
+- Weißer Overlay (30% Opacity)
+- Countdown-Text: "Bereit? 2..." → "Bereit? 1..."
+- Visuelles Feedback für 2-Sekunden-Freeze
+
+### 📝 Änderungen:
+- Musik-Init: `play().then().catch()` mit Fallback
+- `canvas.click`: Tutorial verwendet `loadLevel()`, Normal verwendet `loadLevelByNumber()`
+- `gameLoop()`: Blink-Effekt wenn `!playerCanMove`
+
+### 🎯 Verhalten:
+
+**Musik-Start:**
+```javascript
+menuMusic.play()
+  .then(() => console.log('Musik läuft'))
+  .catch(() => {
+    // Fallback: Bei erstem Click
+    document.addEventListener('click', startMusic, { once: true });
+  });
+```
+
+**Wiederholen:**
+```
+Tutorial Level 3:
+  currentLevel = 3 (1-basiert)
+  → loadLevel(2) (0-basiert) ✅
+
+Normal Level 5:
+  currentLevel = 5 (1-basiert)
+  → loadLevelByNumber(5) ✅
+```
+
+**Blink-Effekt:**
+```
+Level startet → 2 Sekunden Wartezeit
+├─ 0.00s: Blink (weiß)
+├─ 0.25s: Normal
+├─ 0.50s: Blink (weiß)
+├─ 0.75s: Normal
+├─ 1.00s: Blink (weiß)
+├─ 1.25s: Normal
+├─ 1.50s: Blink (weiß)
+├─ 1.75s: Normal
+└─ 2.00s: Spieler kann sich bewegen ✅
+```
+
+---
+
 ## v1.13.0 (25.10.2025) - Menü-Vereinfachung & Auto-Music
 
 ### ✨ UI/UX-Verbesserungen:
@@ -641,14 +707,14 @@ SPIEL → MENÜ:
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.13.0
-**Debug:** v1.13.0-debug
+**Stabil:** v1.14.0
+**Debug:** v1.14.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.13.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.13.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.14.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.14.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.13.0 (6.1 MB)
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.14.0 (6.1 MB)
 
 ---
 
