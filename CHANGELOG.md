@@ -4,6 +4,24 @@
 
 ---
 
+## v1.6.6 (25.10.2025) - Level-Editor Spieler-Rendering Fix
+
+### 🐛 Bug Fix:
+- **Spieler-Icon wird nur noch gezeichnet wenn Tile 'empty' ist**
+- Wenn Erde über Spieler-Position gemalt wird, verschwindet Spieler-Icon
+- "Alles löschen" übermalt jetzt korrekt die Spieler-Position mit Erde
+
+### 📝 Änderungen:
+- `drawLevel()`: Prüft Tile an Spieler-Position vor dem Zeichnen
+- Spieler nur sichtbar wenn `tiles[playerY][playerX] === 'empty'`
+
+### 🎯 Verhalten:
+- Spieler-Tool setzt Tile auf 'empty' und Position
+- Erde-Tool übermalt Spieler-Position → Icon verschwindet
+- "Alles löschen" füllt mit Erde → Spieler nicht mehr sichtbar
+
+---
+
 ## v1.6.5 (25.10.2025) - Border-Mauern & Level-Editor Fix
 
 ### ✨ Neue Features:
@@ -235,14 +253,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.6.5
-**Debug:** v1.6.5-debug
+**Stabil:** v1.6.6
+**Debug:** v1.6.6-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.5
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.5-debug
-- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.5
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.5
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.6
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.6-debug
+- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.6
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.6
 
 ---
 

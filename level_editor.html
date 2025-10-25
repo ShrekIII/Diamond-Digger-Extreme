@@ -526,8 +526,11 @@
                 drawEmoji('🚪', levelData.exit.x, levelData.exit.y);
             }
             
-            // Zeichne Spieler-Start
-            drawEmoji('🧙', levelData.playerStart.x, levelData.playerStart.y);
+            // Zeichne Spieler-Start (nur wenn Tile 'empty' ist)
+            const playerTile = levelData.tiles[levelData.playerStart.y]?.[levelData.playerStart.x];
+            if (playerTile === 'empty') {
+                drawEmoji('🧙', levelData.playerStart.x, levelData.playerStart.y);
+            }
         }
         
         function drawEmoji(emoji, gridX, gridY) {
@@ -768,6 +771,6 @@
     </script>
     
     <!-- Version Badge -->
-    <div class="version-badge">v1.6.5</div>
+    <div class="version-badge">v1.6.6</div>
 </body>
 </html>
