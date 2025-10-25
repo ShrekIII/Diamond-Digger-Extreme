@@ -4,6 +4,46 @@
 
 ---
 
+## v1.8.0 (25.10.2025) - Monster-Bewegung & Magische Wand Physik
+
+### ✨ Gameplay-Features:
+
+**1. TNT-Monster Bewegung (GEGEN Uhrzeigersinn):**
+- TNT-Monster bewegen sich jetzt entlang Wänden
+- Reihenfolge: rechts → unten → links → oben
+- Diamant-Monster: weiterhin im Uhrzeigersinn (links → oben → rechts → unten)
+
+**2. Wände sind zerstörbar:**
+- Explosionen (TNT-Monster) zerstören jetzt auch `wall` Tiles
+- `border` und `magic_wall` bleiben unzerstörbar
+
+**3. Magische Wand - Stein→Diamant:**
+- Wenn Stein auf `magic_wall` fällt UND unten leer ist:
+  - Stein verschwindet
+  - Diamant erscheint unterhalb der magischen Wand
+  - Diamant fällt weiter
+
+**4. Magische Wand - Diamant→Stein:**
+- Wenn Diamant auf `magic_wall` fällt UND unten leer ist:
+  - Diamant verschwindet
+  - Stein erscheint unterhalb der magischen Wand
+  - Stein fällt weiter
+
+### 📝 Änderungen:
+- `moveAlongWallCounterClockwise()` Funktion für TNT-Monster
+- TNT-Monster verwenden neue Bewegungslogik
+- Explosions-Code zerstört walls
+- `updateFallingStones()`: Magic Wall Transformation
+- `updateFallingDiamonds()`: Magic Wall Transformation
+
+### 🎯 Verhalten:
+- TNT-Monster folgen Wänden in umgekehrter Richtung
+- Keine diagonale Bewegung für Monster
+- Magic Wall transformiert nur wenn Platz unten frei ist
+- Transformierte Objekte fallen sofort weiter
+
+---
+
 ## v1.7.0 (25.10.2025) - Tutorial-System
 
 ### ✨ Neue Features:
@@ -312,14 +352,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.7.0
-**Debug:** v1.7.0-debug
+**Stabil:** v1.8.0
+**Debug:** v1.8.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.7.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.7.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.7.0
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.0
 
 ---
 

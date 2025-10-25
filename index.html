@@ -435,7 +435,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.7.2</div>
+        <div class="version-badge">v1.8.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -1106,6 +1106,9 @@
                     const hitsGround = !tunnel.has(belowKey) && !freeFields.has(belowKey);
                     const hitsBoundary = belowGridY >= WORLD_HEIGHT - 2;
                     const hitsWall = isWallAt(obstacle.gridX, belowGridY);
+                    const hitsMagicWall = levelTiles.length > 0 && belowGridY >= 0 && belowGridY < levelTiles.length &&
+                                         obstacle.gridX >= 0 && obstacle.gridX < levelTiles[0].length &&
+                                         levelTiles[belowGridY][obstacle.gridX] === 'magic_wall';
                     const hitsObstacle = obstacles.some(o => 
                         o !== obstacle && o.gridX === obstacle.gridX && o.gridY === belowGridY
                     );
@@ -1114,7 +1117,39 @@
                     );
                     const hitsExit = exitPosition && getExitX() === obstacle.gridX && getExitY() === belowGridY;
                     
-                    if (hitsGround || hitsBoundary || hitsWall || hitsObstacle || hitsDiamond || hitsExit) {
+                    // MAGIC WALL: Stein wird zu Diamant wenn unten leer ist
+                    if (hitsMagicWall) {
+                        const belowMagicWallY = belowGridY + 1;
+                        const belowMagicWallKey = `${obstacle.gridX},${belowMagicWallY}`;
+                        const isEmptyBelowMagicWall = (tunnel.has(belowMagicWallKey) || freeFields.has(belowMagicWallKey)) &&
+                                                      belowMagicWallY < WORLD_HEIGHT &&
+                                                      !obstacles.some(o => o.gridX === obstacle.gridX && o.gridY === belowMagicWallY) &&
+                                                      !diamonds.some(d => d.gridX === obstacle.gridX && d.gridY === belowMagicWallY);
+                        
+                        if (isEmptyBelowMagicWall) {
+                            // Entferne Stein
+                            const obstacleIndex = obstacles.indexOf(obstacle);
+                            if (obstacleIndex > -1) {
+                                obstacles.splice(obstacleIndex, 1);
+                            }
+                            
+                            // Erstelle Diamant unterhalb der magischen Wand
+                            diamonds.push({
+                                gridX: obstacle.gridX,
+                                gridY: belowMagicWallY,
+                                collected: false,
+                                falling: true,
+                                fallDelay: 0,
+                                fallDelayTime: 300,
+                                lastFallTime: currentTime,
+                                fallSpeed: 100
+                            });
+                            totalDiamonds++;
+                            return; // Fertig mit diesem Stein
+                        }
+                    }
+                    
+                    if (hitsGround || hitsBoundary || hitsWall || hitsMagicWall || hitsObstacle || hitsDiamond || hitsExit) {
                         // Stein stoppt - Zustand ändert sich zu "nicht fallend"
                         obstacle.falling = false;
                         obstacle.fallDelay = 0;
@@ -1315,6 +1350,9 @@
                     const hitsGround = !tunnel.has(belowKey) && !freeFields.has(belowKey);
                     const hitsBoundary = belowGridY >= WORLD_HEIGHT - 2;
                     const hitsWall = isWallAt(diamond.gridX, belowGridY);
+                    const hitsMagicWall = levelTiles.length > 0 && belowGridY >= 0 && belowGridY < levelTiles.length &&
+                                         diamond.gridX >= 0 && diamond.gridX < levelTiles[0].length &&
+                                         levelTiles[belowGridY][diamond.gridX] === 'magic_wall';
                     const hitsObstacle = obstacles.some(o => 
                         o.gridX === diamond.gridX && o.gridY === belowGridY
                     );
@@ -1323,7 +1361,37 @@
                     );
                     const hitsExit = exitPosition && getExitX() === diamond.gridX && getExitY() === belowGridY;
                     
-                    if (hitsGround || hitsBoundary || hitsWall || hitsObstacle || hitsDiamond || hitsExit) {
+                    // MAGIC WALL: Diamant wird zu Stein wenn unten leer ist
+                    if (hitsMagicWall) {
+                        const belowMagicWallY = belowGridY + 1;
+                        const belowMagicWallKey = `${diamond.gridX},${belowMagicWallY}`;
+                        const isEmptyBelowMagicWall = (tunnel.has(belowMagicWallKey) || freeFields.has(belowMagicWallKey)) &&
+                                                      belowMagicWallY < WORLD_HEIGHT &&
+                                                      !obstacles.some(o => o.gridX === diamond.gridX && o.gridY === belowMagicWallY) &&
+                                                      !diamonds.some(d => d.gridX === diamond.gridX && d.gridY === belowMagicWallY);
+                        
+                        if (isEmptyBelowMagicWall) {
+                            // Entferne Diamant
+                            diamond.collected = true; // Markiere als gesammelt (wird entfernt)
+                            
+                            // Erstelle Stein unterhalb der magischen Wand
+                            obstacles.push({
+                                gridX: diamond.gridX,
+                                gridY: belowMagicWallY,
+                                falling: true,
+                                fallDelay: 0,
+                                fallDelayTime: 300,
+                                lastFallTime: currentTime,
+                                fallSpeed: 100,
+                                rotation: 0,
+                                rotationSpeed: 0,
+                                spriteIndex: Math.floor(Math.random() * 13)
+                            });
+                            return; // Fertig mit diesem Diamant
+                        }
+                    }
+                    
+                    if (hitsGround || hitsBoundary || hitsWall || hitsMagicWall || hitsObstacle || hitsDiamond || hitsExit) {
                         // Diamant stoppt - Zustand ändert sich zu "nicht fallend"
                         diamond.falling = false;
                         diamond.fallDelay = 0;
@@ -1507,15 +1575,21 @@
                         const ny = monster.gridY + dy;
                         const key = `${nx},${ny}`;
                         
-                        // Prüfe ob im Spielfeld und kein Wand/Exit
+                        // Prüfe ob im Spielfeld und nicht border/magic_wall
                         if (nx >= 0 && nx < WORLD_WIDTH && ny >= 0 && ny < WORLD_HEIGHT &&
-                            !isWallAt(nx, ny)) {
+                            !isInWall(nx, ny)) {  // border und magic_wall sind unzerstörbar
                             
                             const hasExit = exitPosition && getExitX() === nx && getExitY() === ny;
                             
                             if (!hasExit) {
                                 // Mache zu Leerfeld
                                 tunnel.add(key);
+                                
+                                // Zerstöre Wände (walls) durch Explosion
+                                const wallAtPos = walls.find(w => w.gridX === nx && w.gridY === ny);
+                                if (wallAtPos) {
+                                    walls = walls.filter(w => w !== wallAtPos);
+                                }
                                 
                                 // Entferne alle Diamanten auf diesem Feld
                                 diamonds = diamonds.filter(d => !(d.gridX === nx && d.gridY === ny && !d.collected));
@@ -1680,6 +1754,25 @@
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
                                 gameOver = true;
                                 gameOverReason = '👾 Von einem Monster erwischt!';
+                            }
+                            return; // Fertig mit diesem Monster
+                        } else {
+                            return; // Keine Bewegung möglich
+                        }
+                    } else if (monster.type === 'tnt') {
+                        // TNT-Monster: Bewegung entlang Wänden GEGEN Uhrzeigersinn (rechts→unten→links→oben)
+                        const move = moveAlongWallCounterClockwise(monster);
+                        if (move) {
+                            newX = move.x;
+                            newY = move.y;
+                            // TNT Monster: Position direkt setzen
+                            monster.gridX = newX;
+                            monster.gridY = newY;
+                            
+                            // Prüfe Kollision mit Spieler
+                            if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
+                                gameOver = true;
+                                gameOverReason = '💣 Von einem Sprengmonster erwischt!';
                             }
                             return; // Fertig mit diesem Monster
                         } else {
@@ -1852,6 +1945,120 @@
             const movesToConsider = nonPreviousMoves.length > 0 ? nonPreviousMoves : validMoves;
             
             // Wähle erste Bewegung (Regel 2: im Uhrzeigersinn)
+            if (movesToConsider.length > 0) {
+                const chosenMove = movesToConsider[0];
+                
+                // Speichere vorherige Position
+                monster.previousPosition = { x: monster.gridX, y: monster.gridY };
+                
+                // Aktualisiere Richtung
+                monster.direction = chosenMove.dirIndex;
+                
+                return { x: chosenMove.x, y: chosenMove.y };
+            }
+            
+            // Keine Bewegung möglich
+            return null;
+        }
+        
+        // Bewegungslogik für "tnt" Monster entlang Wänden/Erde (GEGEN Uhrzeigersinn: rechts→unten→links→oben)
+        function moveAlongWallCounterClockwise(monster) {
+            // Initialisiere previousPosition falls nicht vorhanden
+            if (!monster.previousPosition) {
+                monster.previousPosition = { x: monster.gridX, y: monster.gridY };
+            }
+            
+            // Initialisiere Richtung falls nicht vorhanden (2=O/rechts, Start gegen Uhrzeigersinn)
+            if (monster.direction === undefined) {
+                monster.direction = 2; // Start: Osten/rechts (gegen Uhrzeigersinn)
+            }
+            
+            // Richtungen GEGEN Uhrzeigersinn: O, SO, S, SW, W, NW, N, NO
+            const directions = [
+                {x: 1, y: 0},   // O (rechts)
+                {x: 1, y: 1},   // SO
+                {x: 0, y: 1},   // S (unten)
+                {x: -1, y: 1},  // SW
+                {x: -1, y: 0},  // W (links)
+                {x: -1, y: -1}, // NW
+                {x: 0, y: -1},  // N (oben)
+                {x: 1, y: -1}   // NO
+            ];
+            
+            // Funktion: Prüft ob Feld ein Objekt ist (alles außer Leerfeld)
+            const isObject = (x, y) => {
+                if (isInWall(x, y)) return true;
+                
+                const pos = `${x},${y}`;
+                if (!tunnel.has(pos) && !freeFields.has(pos) && !isInWall(x, y)) {
+                    return true;
+                }
+                
+                if (obstacles.some(o => o.gridX === x && o.gridY === y)) return true;
+                if (diamonds.some(d => d.gridX === x && d.gridY === y)) return true;
+                if (monsters.some(m => m !== monster && !m.dead && m.gridX === x && m.gridY === y)) {
+                    return true;
+                }
+                
+                const playerGridX = Math.floor((player.x - GRID_SIZE / 2) / GRID_SIZE);
+                const playerGridY = Math.floor((player.y - GRID_SIZE / 2) / GRID_SIZE);
+                if (x === playerGridX && y === playerGridY) return true;
+                
+                if (walls.find(w => w.gridX === x && w.gridY === y)) return true;
+                
+                return false;
+            };
+            
+            // Funktion: Prüft ob Feld leer/begehbar ist
+            const isEmpty = (x, y) => {
+                const pos = `${x},${y}`;
+                const hasObstacle = obstacles.some(o => o.gridX === x && o.gridY === y);
+                const hasMonster = monsters.some(m => m !== monster && !m.dead && m.gridX === x && m.gridY === y);
+                return (tunnel.has(pos) || freeFields.has(pos)) && !hasObstacle && !hasMonster && !isInWall(x, y);
+            };
+            
+            // Funktion: Prüft ob mindestens ein Nachbarfeld ein Objekt ist
+            const hasObjectNeighbor = (x, y) => {
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        if (dx === 0 && dy === 0) continue;
+                        if (isObject(x + dx, y + dy)) return true;
+                    }
+                }
+                return false;
+            };
+            
+            // Versuche Bewegung GEGEN Uhrzeigersinn
+            let validMoves = [];
+            
+            for (let i = 0; i < directions.length; i++) {
+                const dirIndex = (monster.direction + i) % directions.length;
+                const dir = directions[dirIndex];
+                const newX = monster.gridX + dir.x;
+                const newY = monster.gridY + dir.y;
+                
+                // Regel 3: Bewegung in direkter Nähe zu Objekten
+                if (!hasObjectNeighbor(newX, newY)) continue;
+                
+                // Prüfe ob Feld leer ist
+                if (!isEmpty(newX, newY)) continue;
+                
+                // Regel 1: Betrete nicht das Feld von dem du direkt kamst
+                const isPrevious = (newX === monster.previousPosition.x && newY === monster.previousPosition.y);
+                
+                validMoves.push({
+                    x: newX,
+                    y: newY,
+                    dirIndex: dirIndex,
+                    isPrevious: isPrevious
+                });
+            }
+            
+            // Regel 1: Wenn es andere leere Felder gibt, vermeide das vorherige
+            const nonPreviousMoves = validMoves.filter(m => !m.isPrevious);
+            const movesToConsider = nonPreviousMoves.length > 0 ? nonPreviousMoves : validMoves;
+            
+            // Wähle erste Bewegung (gegen Uhrzeigersinn)
             if (movesToConsider.length > 0) {
                 const chosenMove = movesToConsider[0];
                 
