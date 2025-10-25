@@ -4,6 +4,105 @@
 
 ---
 
+## v1.13.0 (25.10.2025) - Menü-Vereinfachung & Auto-Music
+
+### ✨ UI/UX-Verbesserungen:
+
+**1. "Level Laden" Button entfernt:**
+- ❌ Removed: "📂 Level Laden" Button
+- Grund: Vereinfachung des Hauptmenüs
+- Nur noch 2 Buttons:
+  - ▶ Spiel Starten
+  - 📚 Tutorial Starten
+
+**2. Menü-Musik startet automatisch:**
+- **OHNE User-Interaktion** erforderlich
+- Autoplay-Trick: `<audio autoplay muted>` + sofortiges unmute
+- Funktioniert in den meisten modernen Browsern
+- Musik startet beim ersten Laden der Seite
+
+### 📝 Änderungen:
+- `<audio id="menuMusic">`: `autoplay muted` hinzugefügt
+- Initialisierung: `menuMusic.muted = false` (sofortiges unmute)
+- `showMenu()`: Prüft ob Musik pausiert ist
+- `hideMenu()`: Pausiert statt reset (Position bleibt)
+- HTML: "Level Laden" Button entfernt
+
+### 🎯 Verhalten:
+```
+SEITE LÄDT:
+  ✅ Menü-Musik startet SOFORT (20%)
+  ✅ OHNE Click/Key erforderlich
+  ✅ Autoplay-Trick umgeht Browser-Blockierung
+
+SPIEL STARTEN:
+  ❌ Menü-Musik pausiert
+  ✅ Ingame-Musik startet (15%)
+
+ZURÜCK ZUM MENÜ:
+  ❌ Ingame-Musik stoppt
+  ✅ Menü-Musik fortsetzt
+```
+
+### 🎵 Autoplay-Technik:
+```html
+<!-- Startet muted (erlaubt Autoplay) -->
+<audio id="menuMusic" loop autoplay muted>
+
+<!-- JavaScript unmuted sofort -->
+menuMusic.muted = false;  // 🎵 Musik läuft!
+```
+
+---
+
+## v1.12.0 (25.10.2025) - Ingame Music & Audio Balance
+
+### 🎵 Audio-Features:
+
+**1. Ingame-Musik hinzugefügt:**
+- Neue Datei: `/music/ingame.mp3` (2.6 MB)
+- Spielt während Spiel/Tutorial
+- Loop: Endlosschleife
+- Lautstärke: **15%**
+
+**2. Menü-Musik Lautstärke angepasst:**
+- Alt: 30%
+- Neu: **20%**
+- Angenehmer für längeres Hören
+
+**3. Automatischer Musik-Wechsel:**
+- **Menü öffnen**: 
+  - Menü-Musik startet (20%)
+  - Ingame-Musik stoppt
+- **Spiel starten**: 
+  - Ingame-Musik startet (15%)
+  - Menü-Musik stoppt
+
+### 📁 Neue Dateien:
+- `music/ingame.mp3` - Gameplay-Hintergrundmusik (2.6 MB)
+
+### 📝 Änderungen:
+- `showMenu()`: Startet Menü-Musik (20%), stoppt Ingame-Musik
+- `hideMenu()`: Startet Ingame-Musik (15%), stoppt Menü-Musik
+- Initialisierung: Beide Tracks mit korrekten Volumes
+
+### 🎯 Audio-Verhalten:
+```
+MENÜ → SPIEL:
+  ❌ menu_background.mp3 (stoppt)
+  ✅ ingame.mp3 (startet @ 15%)
+
+SPIEL → MENÜ:
+  ❌ ingame.mp3 (stoppt)
+  ✅ menu_background.mp3 (startet @ 20%)
+```
+
+### 📊 Package-Größe:
+- **Alt**: 3.6 MB
+- **Neu**: 6.1 MB (+2.5 MB durch ingame.mp3)
+
+---
+
 ## v1.11.0 (25.10.2025) - Polish & Tutorial-Erweiterung
 
 ### ✨ UX-Verbesserungen:
@@ -542,14 +641,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.11.0
-**Debug:** v1.11.0-debug
+**Stabil:** v1.13.0
+**Debug:** v1.13.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.11.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.11.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.13.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.13.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.11.0 (3.6 MB)
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.13.0 (6.1 MB)
 
 ---
 

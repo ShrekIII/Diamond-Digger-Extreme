@@ -413,11 +413,10 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.11.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.13.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
-                    <button class="menu-btn" onclick="loadCustomLevelsFromMenu()">📂 Level Laden</button>
                 </div>
             </div>
             <div class="menu-right">
@@ -436,12 +435,17 @@
     </div>
     
     <!-- Menü Hintergrundmusik -->
-    <audio id="menuMusic" loop>
+    <audio id="menuMusic" loop autoplay muted>
         <source src="https://shrekiii.github.io/Diamond-Digger-Extreme/music/menu_background.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Ingame Musik -->
+    <audio id="ingameMusic" loop>
+        <source src="https://shrekiii.github.io/Diamond-Digger-Extreme/music/ingame.mp3" type="audio/mpeg">
     </audio>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.11.0</div>
+        <div class="version-badge">v1.13.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -3020,26 +3024,22 @@
         loadHighscores();
         displayHighscores();
         
-        // Initialisiere Menü-Musik (wird beim showMenu() gestartet)
+        // Initialisiere Menü-Musik (20% Lautstärke)
         const menuMusic = document.getElementById('menuMusic');
         if (menuMusic) {
-            menuMusic.volume = 0.3;  // 30% Lautstärke
-            console.log('🎵 Menü-Musik initialisiert (30% Lautstärke)');
+            menuMusic.volume = 0.2;  // 20% Lautstärke
             
-            // Versuche Musik beim ersten Laden zu starten
-            menuMusic.play().catch(err => {
-                console.log('🎵 Autoplay verhindert - Musik startet nach User-Interaktion');
-                // Bei erstem Click/Tastendruck starten
-                const startMusic = () => {
-                    if (document.getElementById('menuScreen').classList.contains('active')) {
-                        menuMusic.play().catch(e => console.log('Musik-Start fehlgeschlagen:', e));
-                    }
-                    document.removeEventListener('click', startMusic);
-                    document.removeEventListener('keydown', startMusic);
-                };
-                document.addEventListener('click', startMusic);
-                document.addEventListener('keydown', startMusic);
-            });
+            // Autoplay-Trick: Audio startet muted, wir unmuten es sofort
+            // Dies funktioniert in den meisten Browsern ohne User-Interaktion
+            menuMusic.muted = false;
+            console.log('🎵 Menü-Musik gestartet (20% Lautstärke, automatisch)');
+        }
+        
+        // Initialisiere Ingame-Musik (15% Lautstärke)
+        const ingameMusic = document.getElementById('ingameMusic');
+        if (ingameMusic) {
+            ingameMusic.volume = 0.15;  // 15% Lautstärke
+            console.log('🎵 Ingame-Musik initialisiert (15% Lautstärke)');
         }
         
         // Setze Menü-Hintergrund (Bild muss im gleichen Verzeichnis liegen)
@@ -3459,24 +3459,43 @@
             // Schließe Name-Input Modal falls offen
             document.getElementById('nameInputModal').classList.remove('active');
             
-            // Starte Menü-Musik mit 30% Lautstärke
+            // Stoppe Ingame-Musik
+            const ingameMusic = document.getElementById('ingameMusic');
+            if (ingameMusic) {
+                ingameMusic.pause();
+                ingameMusic.currentTime = 0;
+            }
+            
+            // Starte/Fortsetze Menü-Musik
             const menuMusic = document.getElementById('menuMusic');
             if (menuMusic) {
-                menuMusic.volume = 0.3;  // 30% Lautstärke
-                menuMusic.play().catch(err => {
-                    console.log('🎵 Autoplay verhindert - Musik startet nach User-Interaktion');
-                });
+                menuMusic.volume = 0.2;  // 20% Lautstärke
+                menuMusic.muted = false;  // Falls gemuted
+                if (menuMusic.paused) {
+                    menuMusic.play().catch(err => {
+                        console.log('🎵 Menü-Musik konnte nicht gestartet werden');
+                    });
+                }
             }
         }
         
         function hideMenu() {
             document.getElementById('menuScreen').classList.remove('active');
             
-            // Stoppe Menü-Musik
+            // Pausiere Menü-Musik (nicht stoppen, damit Position erhalten bleibt)
             const menuMusic = document.getElementById('menuMusic');
             if (menuMusic) {
                 menuMusic.pause();
                 menuMusic.currentTime = 0;  // Zurücksetzen
+            }
+            
+            // Starte Ingame-Musik mit 15% Lautstärke
+            const ingameMusic = document.getElementById('ingameMusic');
+            if (ingameMusic) {
+                ingameMusic.volume = 0.15;  // 15% Lautstärke
+                ingameMusic.play().catch(err => {
+                    console.log('🎵 Ingame-Musik Autoplay verhindert');
+                });
             }
             
             // gameStarted wird von den Start-Funktionen gesetzt (startGame/startTutorial)
