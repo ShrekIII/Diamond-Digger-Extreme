@@ -4,6 +4,36 @@
 
 ---
 
+## v1.8.2 (25.10.2025) - Level & Tutorial Updates
+
+### 📁 Level-Dateien aktualisiert:
+
+**Tutorial-Level:**
+- ✅ `tutorial_01.json` - Collect Diamonds (aktualisiert)
+- ✅ `tutorial_02.json` - Learn the Physics of Rocks (aktualisiert)
+- ✅ `tutorial_03.json` - Use of Exploding Monsters (aktualisiert)
+- ✅ `tutorial_04.json` - Watch Out for Traps (aktualisiert, requiredDiamonds: 24)
+- ✅ `tutorial_05.json` - Learn About Magic Walls (aktualisiert)
+
+**Game-Level:**
+- ✅ `level_00.json` - Level_00 (aktualisiert, 13x11, requiredDiamonds: 5)
+
+### 📝 Änderungen:
+- Alle Tutorial-Level mit neuesten Versionen ersetzt
+- Level_00 komplett überarbeitet (kleineres Level)
+- Level_00 enthält Diamond-Monster
+
+### 🎯 Neue Features in Level_00:
+- **Größe:** 13x11 (kleiner, kompakter)
+- **Start:** (2,2)
+- **Exit:** (10,2)
+- **Steine:** 5 Steine in Reihe
+- **Monster:** 1 Diamond-Monster
+- **Diamanten:** 0 am Start (werden durch Monster-Tod erstellt)
+- **Benötigt:** 5 Diamanten
+
+---
+
 ## v1.8.1 (25.10.2025) - Monster-Bewegung Fix & Explosions-Physik
 
 ### ✨ Gameplay-Features:
@@ -383,14 +413,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.8.1
-**Debug:** v1.8.1-debug
+**Stabil:** v1.8.2
+**Debug:** v1.8.2-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.1
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.1-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.2
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.2-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.1
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.2
 
 ---
 
