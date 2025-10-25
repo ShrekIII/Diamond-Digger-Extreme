@@ -4,6 +4,37 @@
 
 ---
 
+## v1.8.1 (25.10.2025) - Monster-Bewegung Fix & Explosions-Physik
+
+### ✨ Gameplay-Features:
+
+**1. Tutorial-Level aktualisiert:**
+- `tutorial_04.json` aktualisiert (Watch Out for Traps)
+- `tutorial_05.json` aktualisiert (Learn About Magic Walls)
+
+**2. Keine diagonale Monster-Bewegung:**
+- Diamond-Monster: nur N, O, S, W (im Uhrzeigersinn)
+- TNT-Monster: nur O, S, W, N (gegen Uhrzeigersinn)
+- Monster bewegen sich NUR vertikal/horizontal
+
+**3. Fallende Steine + Explosion:**
+- Fallende Steine im Explosionsradius werden zu Diamanten
+- Explosion wandelt fallenden Stein → Diamant (fallend)
+- Diamant fällt weiter nach Transformation
+
+### 📝 Änderungen:
+- `moveAlongWall()`: 4 Richtungen statt 8 (keine Diagonalen)
+- `moveAlongWallCounterClockwise()`: 4 Richtungen statt 8
+- `handleMonsterDeath()`: Prüft auf fallende Steine, wandelt zu Diamanten
+- Tutorial 04 & 05 ersetzt
+
+### 🎯 Verhalten:
+- Monster: nur 4-Richtungen (↑→↓←)
+- Explosion + fallender Stein = fallender Diamant
+- TNT-Monster Explosion transformiert Steine korrekt
+
+---
+
 ## v1.8.0 (25.10.2025) - Monster-Bewegung & Magische Wand Physik
 
 ### ✨ Gameplay-Features:
@@ -352,14 +383,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.8.0
-**Debug:** v1.8.0-debug
+**Stabil:** v1.8.1
+**Debug:** v1.8.1-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.1
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.1-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.0
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.1
 
 ---
 

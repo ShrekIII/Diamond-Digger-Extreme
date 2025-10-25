@@ -435,7 +435,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.8.0</div>
+        <div class="version-badge">v1.8.1</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -1594,6 +1594,26 @@
                                 // Entferne alle Diamanten auf diesem Feld
                                 diamonds = diamonds.filter(d => !(d.gridX === nx && d.gridY === ny && !d.collected));
                                 
+                                // Fallende Steine werden zu Diamanten (nicht zu Leerfeld!)
+                                const stoneAtPos = obstacles.find(o => o.gridX === nx && o.gridY === ny && o.falling);
+                                if (stoneAtPos) {
+                                    // Entferne fallenden Stein
+                                    obstacles = obstacles.filter(o => o !== stoneAtPos);
+                                    
+                                    // Erstelle Diamant
+                                    diamonds.push({
+                                        gridX: nx,
+                                        gridY: ny,
+                                        collected: false,
+                                        falling: true,
+                                        fallDelay: 0,
+                                        fallDelayTime: 300,
+                                        lastFallTime: performance.now(),
+                                        fallSpeed: 100
+                                    });
+                                    totalDiamonds++;
+                                }
+                                
                                 // Prüfe ob ein anderes Monster auf diesem Feld ist
                                 monsters.forEach(otherMonster => {
                                     if (!otherMonster.dead && otherMonster.gridX === nx && otherMonster.gridY === ny) {
@@ -1847,16 +1867,12 @@
                 monster.direction = 1; // Start: Osten (im Uhrzeigersinn)
             }
             
-            // Richtungen im Uhrzeigersinn: N, NO, O, SO, S, SW, W, NW
+            // Richtungen im Uhrzeigersinn: N, O, S, W (KEINE diagonalen Bewegungen!)
             const directions = [
-                {x: 0, y: -1},  // N
-                {x: 1, y: -1},  // NO
-                {x: 1, y: 0},   // O
-                {x: 1, y: 1},   // SO
-                {x: 0, y: 1},   // S
-                {x: -1, y: 1},  // SW
-                {x: -1, y: 0},  // W
-                {x: -1, y: -1}  // NW
+                {x: 0, y: -1},  // N (oben)
+                {x: 1, y: 0},   // O (rechts)
+                {x: 0, y: 1},   // S (unten)
+                {x: -1, y: 0}   // W (links)
             ];
             
             // Funktion: Prüft ob Feld ein Objekt ist (alles außer Leerfeld)
@@ -1968,21 +1984,17 @@
                 monster.previousPosition = { x: monster.gridX, y: monster.gridY };
             }
             
-            // Initialisiere Richtung falls nicht vorhanden (2=O/rechts, Start gegen Uhrzeigersinn)
+            // Initialisiere Richtung falls nicht vorhanden (0=O, 1=S, 2=W, 3=N)
             if (monster.direction === undefined) {
-                monster.direction = 2; // Start: Osten/rechts (gegen Uhrzeigersinn)
+                monster.direction = 0; // Start: Osten/rechts (gegen Uhrzeigersinn)
             }
             
-            // Richtungen GEGEN Uhrzeigersinn: O, SO, S, SW, W, NW, N, NO
+            // Richtungen GEGEN Uhrzeigersinn: O, S, W, N (KEINE diagonalen Bewegungen!)
             const directions = [
                 {x: 1, y: 0},   // O (rechts)
-                {x: 1, y: 1},   // SO
                 {x: 0, y: 1},   // S (unten)
-                {x: -1, y: 1},  // SW
                 {x: -1, y: 0},  // W (links)
-                {x: -1, y: -1}, // NW
-                {x: 0, y: -1},  // N (oben)
-                {x: 1, y: -1}   // NO
+                {x: 0, y: -1}   // N (oben)
             ];
             
             // Funktion: Prüft ob Feld ein Objekt ist (alles außer Leerfeld)
