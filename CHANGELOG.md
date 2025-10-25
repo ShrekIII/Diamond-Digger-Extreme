@@ -4,6 +4,63 @@
 
 ---
 
+## v1.11.0 (25.10.2025) - Polish & Tutorial-Erweiterung
+
+### ✨ UX-Verbesserungen:
+
+**1. Menü-Musik beim ersten Laden:**
+- Musik startet automatisch beim ersten Öffnen
+- Fallback: Bei Autoplay-Blockierung startet nach erstem Click/Tastendruck
+- Smooth User Experience
+
+**2. Versionsnummer im Hauptmenü:**
+- Version "v1.11.0" direkt unter dem Titel sichtbar
+- Goldene Farbe (#FFD700)
+- Immer aktuell und prominent platziert
+
+**3. "Wiederholen" merkt sich Level-Typ:**
+- Wiederholen lädt korrekt:
+  - Tutorial: `inTutorialMode = true`
+  - Custom Level: `usingCustomLevels = true`
+  - Normal Level: Standard-Modus
+- `currentLevel` bleibt erhalten
+
+**4. 2 Sekunden Wartezeit bei Level-Start:**
+- Spieler kann sich erst nach 2 Sekunden bewegen
+- Zeit zum Orientieren und Level anschauen
+- `playerCanMove = false` beim Start
+- Nach 2000ms: `playerCanMove = true`
+
+**5. Tutorial 05 ersetzt:**
+- Neu: "Learn to Grab Without Moving"
+- Monster: 1x TNT
+- Diamanten: 4
+- Required: 12 Diamanten
+
+**6. Tutorial 06 hinzugefügt:**
+- Neu: "Learn About Magic Walls"
+- 44 Steine über Magic Wall
+- Required: 40 Diamanten
+- 6 Tutorials gesamt!
+
+### 📁 Geänderte/Neue Dateien:
+- `tutorials/tutorial_05.json` - Ersetzt
+- `tutorials/tutorial_06.json` - Neu hinzugefügt
+
+### 📝 Änderungen:
+- `movePlayer()`: Prüft `playerCanMove` vor Bewegung
+- `loadLevel()`: Setzt `levelStartTime` und `playerCanMove = false`
+- Menü: Versionsnummer hinzugefügt
+- Musik: Auto-Start mit Fallback
+
+### 🎯 Verhalten:
+- **Level-Start**: 2 Sekunden freeze
+- **Wiederholen**: Lädt exakt gleiches Level
+- **Musik**: Spielt sofort (oder nach Click)
+- **Version**: Immer sichtbar
+
+---
+
 ## v1.10.0 (25.10.2025) - Diamond Digger Rebranding & Menu Music
 
 ### ✨ UI/UX-Features:
@@ -485,14 +542,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.10.0
-**Debug:** v1.10.0-debug
+**Stabil:** v1.11.0
+**Debug:** v1.11.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.10.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.10.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.11.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.11.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.10.0 (3.6 MB)
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.11.0 (3.6 MB)
 
 ---
 

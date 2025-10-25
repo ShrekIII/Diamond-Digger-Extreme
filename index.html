@@ -413,6 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.11.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
@@ -438,14 +439,9 @@
     <audio id="menuMusic" loop>
         <source src="https://shrekiii.github.io/Diamond-Digger-Extreme/music/menu_background.mp3" type="audio/mpeg">
     </audio>
-                </div>
-                <div class="highscore-list" id="highscoreList">
-                    <!-- Highscores werden hier eingefügt -->
-                </div>
-            </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.10.0</div>
+        <div class="version-badge">v1.11.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -582,6 +578,8 @@
         let lastFrameTime = performance.now();
         let highscores = [];
         let gameStarted = false;
+        let playerCanMove = false;  // Spieler kann sich erst nach 2 Sekunden bewegen
+        let levelStartTime = 0;     // Wann wurde das Level gestartet
         let currentPlayerStats = null;
         let exitOpen = false;
         let exitPosition = null;
@@ -2391,6 +2389,16 @@
         function movePlayer(currentTime) {
             if (gameOver) return;
             
+            // Prüfe ob 2 Sekunden seit Level-Start vergangen sind
+            if (!playerCanMove) {
+                if (currentTime - levelStartTime >= 2000) {
+                    playerCanMove = true;
+                    console.log('✅ Spieler kann sich jetzt bewegen');
+                } else {
+                    return;  // Noch keine 2 Sekunden vergangen
+                }
+            }
+            
             if (currentTime - lastMoveTime < moveDelay) return;
             
             // Setze moving auf false am Anfang - wird auf true gesetzt wenn Bewegung erfolgt
@@ -3017,6 +3025,21 @@
         if (menuMusic) {
             menuMusic.volume = 0.3;  // 30% Lautstärke
             console.log('🎵 Menü-Musik initialisiert (30% Lautstärke)');
+            
+            // Versuche Musik beim ersten Laden zu starten
+            menuMusic.play().catch(err => {
+                console.log('🎵 Autoplay verhindert - Musik startet nach User-Interaktion');
+                // Bei erstem Click/Tastendruck starten
+                const startMusic = () => {
+                    if (document.getElementById('menuScreen').classList.contains('active')) {
+                        menuMusic.play().catch(e => console.log('Musik-Start fehlgeschlagen:', e));
+                    }
+                    document.removeEventListener('click', startMusic);
+                    document.removeEventListener('keydown', startMusic);
+                };
+                document.addEventListener('click', startMusic);
+                document.addEventListener('keydown', startMusic);
+            });
         }
         
         // Setze Menü-Hintergrund (Bild muss im gleichen Verzeichnis liegen)
@@ -3214,6 +3237,11 @@
             lastTimerUpdate = performance.now();
             timerRunning = true;
             flashEffect = false;
+            
+            // Setze Level-Start-Zeit und sperre Spieler-Bewegung für 2 Sekunden
+            levelStartTime = performance.now();
+            playerCanMove = false;
+            console.log('🎮 Level gestartet - Spieler kann sich in 2 Sekunden bewegen');
             
             // Update UI
             levelDisplay.textContent = currentLevel;
