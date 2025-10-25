@@ -1605,20 +1605,10 @@
         function updateMonsters() {
             const currentTime = Date.now();
             
-            console.log('👾 updateMonsters() aufgerufen, monsters.length:', monsters.length);
-            
             monsters.forEach(monster => {
-                console.log(`  Monster: type=${monster.type}, gridX=${monster.gridX}, gridY=${monster.gridY}, dead=${monster.dead}`);
-                console.log(`    currentTime=${currentTime}, lastMoveTime=${monster.lastMoveTime}, moveDelay=${monster.moveDelay}`);
-                console.log(`    Zeitdiff: ${currentTime - monster.lastMoveTime}, > ${monster.moveDelay}? ${currentTime - monster.lastMoveTime > monster.moveDelay}`);
-                
-                if (monster.dead) {
-                    console.log(`    ⏭️ Monster tot, überspringe`);
-                    return;
-                }
+                if (monster.dead) return;
                 
                 if (currentTime - monster.lastMoveTime > monster.moveDelay) {
-                    console.log(`    ⏰ Zeit für Bewegung!`);
                     monster.lastMoveTime = currentTime;
                     
                     const playerGridX = Math.floor((player.x - GRID_SIZE / 2) / GRID_SIZE);
@@ -1629,17 +1619,13 @@
                     
                     // Spezielle Bewegungslogik für "diamond" Monster
                     if (monster.type === 'diamond') {
-                        console.log(`🔷 Diamond Monster bei (${monster.gridX}, ${monster.gridY})`);
                         const move = moveAlongWall(monster);
-                        console.log('moveAlongWall return:', move);
                         if (move) {
                             newX = move.x;
                             newY = move.y;
-                            console.log(`✅ Bewege zu (${newX}, ${newY})`);
                             // Diamond Monster: Position direkt setzen (moveAlongWall prüft bereits alles)
                             monster.gridX = newX;
                             monster.gridY = newY;
-                            console.log(`✅ Position gesetzt: (${monster.gridX}, ${monster.gridY})`);
                             
                             // Prüfe Kollision mit Spieler
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
@@ -1648,7 +1634,6 @@
                             }
                             return; // Fertig mit diesem Monster
                         } else {
-                            console.log('❌ moveAlongWall return null - keine Bewegung möglich');
                             return; // Keine Bewegung möglich
                         }
                     } else {
@@ -1732,11 +1717,39 @@
                 {x: -1, y: -1}  // NW
             ];
             
-            // Funktion: Prüft ob Feld eine Wand oder Erde ist
-            const isWallOrEarth = (x, y) => {
+            // Funktion: Prüft ob Feld ein Objekt ist (alles außer Leerfeld)
+            const isObject = (x, y) => {
+                // 1. Wand (unzerstörbar)
                 if (isInWall(x, y)) return true;
-                const wallAtPos = walls.find(w => w.gridX === x && w.gridY === y);
-                return wallAtPos !== undefined;
+                
+                // 2. Erde (nicht ausgegraben)
+                const pos = `${x},${y}`;
+                if (!tunnel.has(pos) && !freeFields.has(pos) && !isInWall(x, y)) {
+                    // Feld ist weder tunnel noch freeField noch Wand
+                    // → Wahrscheinlich Erde
+                    return true;
+                }
+                
+                // 3. Stein (obstacle)
+                if (obstacles.some(o => o.gridX === x && o.gridY === y)) return true;
+                
+                // 4. Diamant
+                if (diamonds.some(d => d.gridX === x && d.gridY === y)) return true;
+                
+                // 5. Anderes Monster (nicht das bewegende Monster selbst!)
+                if (monsters.some(m => m !== monster && !m.dead && m.gridX === x && m.gridY === y)) {
+                    return true;
+                }
+                
+                // 6. Spieler
+                const playerGridX = Math.floor((player.x - GRID_SIZE / 2) / GRID_SIZE);
+                const playerGridY = Math.floor((player.y - GRID_SIZE / 2) / GRID_SIZE);
+                if (x === playerGridX && y === playerGridY) return true;
+                
+                // 7. Health-Wände (walls Array)
+                if (walls.find(w => w.gridX === x && w.gridY === y)) return true;
+                
+                return false;
             };
             
             // Funktion: Prüft ob Feld leer/begehbar ist
@@ -1747,12 +1760,12 @@
                 return (tunnel.has(pos) || freeFields.has(pos)) && !hasObstacle && !hasMonster && !isInWall(x, y);
             };
             
-            // Funktion: Prüft ob mindestens ein Nachbarfeld Wand/Erde ist
-            const hasWallNeighbor = (x, y) => {
+            // Funktion: Prüft ob mindestens ein Nachbarfeld ein Objekt ist
+            const hasObjectNeighbor = (x, y) => {
                 for (let dy = -1; dy <= 1; dy++) {
                     for (let dx = -1; dx <= 1; dx++) {
                         if (dx === 0 && dy === 0) continue;
-                        if (isWallOrEarth(x + dx, y + dy)) return true;
+                        if (isObject(x + dx, y + dy)) return true;
                     }
                 }
                 return false;
@@ -1762,35 +1775,20 @@
             // Starte von aktueller Richtung und prüfe alle Richtungen
             let validMoves = [];
             
-            console.log('🔍 Prüfe Richtungen für Monster bei', monster.gridX, monster.gridY);
-            
             for (let i = 0; i < directions.length; i++) {
                 const dirIndex = (monster.direction + i) % directions.length;
                 const dir = directions[dirIndex];
                 const newX = monster.gridX + dir.x;
                 const newY = monster.gridY + dir.y;
                 
-                console.log(`  Richtung ${dirIndex}: (${newX}, ${newY})`);
-                
-                // Regel 3: Bewegung in direkter Nähe zu Erde/Wänden
-                const hasWall = hasWallNeighbor(newX, newY);
-                console.log(`    hasWallNeighbor: ${hasWall}`);
-                if (!hasWall) {
-                    console.log(`    ❌ Keine Wand in Nähe`);
-                    continue;
-                }
+                // Regel 3: Bewegung in direkter Nähe zu Objekten
+                if (!hasObjectNeighbor(newX, newY)) continue;
                 
                 // Prüfe ob Feld leer ist
-                const empty = isEmpty(newX, newY);
-                console.log(`    isEmpty: ${empty}`);
-                if (!empty) {
-                    console.log(`    ❌ Feld nicht leer`);
-                    continue;
-                }
+                if (!isEmpty(newX, newY)) continue;
                 
                 // Regel 1: Betrete nicht das Feld von dem du direkt kamst
                 const isPrevious = (newX === monster.previousPosition.x && newY === monster.previousPosition.y);
-                console.log(`    isPrevious: ${isPrevious}`);
                 
                 validMoves.push({
                     x: newX,
@@ -1798,21 +1796,15 @@
                     dirIndex: dirIndex,
                     isPrevious: isPrevious
                 });
-                console.log(`    ✅ Valid move hinzugefügt`);
             }
-            
-            console.log(`📊 Gefundene validMoves: ${validMoves.length}`);
             
             // Regel 1: Wenn es andere leere Felder gibt, vermeide das vorherige
             const nonPreviousMoves = validMoves.filter(m => !m.isPrevious);
             const movesToConsider = nonPreviousMoves.length > 0 ? nonPreviousMoves : validMoves;
             
-            console.log(`📊 movesToConsider: ${movesToConsider.length}`);
-            
             // Wähle erste Bewegung (Regel 2: im Uhrzeigersinn)
             if (movesToConsider.length > 0) {
                 const chosenMove = movesToConsider[0];
-                console.log(`✅ Chosen move: (${chosenMove.x}, ${chosenMove.y})`);
                 
                 // Speichere vorherige Position
                 monster.previousPosition = { x: monster.gridX, y: monster.gridY };
@@ -1822,8 +1814,6 @@
                 
                 return { x: chosenMove.x, y: chosenMove.y };
             }
-            
-            console.log('❌ Keine Bewegung gefunden');
             
             // Keine Bewegung möglich
             return null;
