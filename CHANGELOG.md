@@ -4,6 +4,34 @@
 
 ---
 
+## v1.6.7 (25.10.2025) - Editor-Fixes & Magische Wand
+
+### ✨ Neue Features:
+- **Magische Wand (🟪):** Neuer Tile-Typ im Editor
+- Visuell: Lila/Magenta mit Glanz-Effekt
+- Verhalten: Unzerstörbar wie border (derzeit)
+
+### 🐛 Bug Fixes:
+- **"Mit Erde füllen":** Überschreibt jetzt auch Spieler-Position
+- **"Mit Erde füllen":** Korrigiert auf `levelHeight - 2` (statt -3)
+- **"Mit Erde füllen":** Prüft nur border (statt wall)
+
+### ✨ Validierung beim Speichern:
+- ❌ Fehler wenn Spieler nicht platziert ist
+- ❌ Fehler wenn Ausgang nicht platziert ist
+- ❌ Fehler wenn Spieler nicht auf 'empty' Tile ist
+- ❌ Fehler wenn Ausgang nicht auf 'empty' Tile ist
+- ✅ Klare Fehlermeldungen mit Anweisungen
+
+### 📝 Änderungen:
+- **Level-Editor:** `fillEarth()` überschreibt alle Tiles außer border
+- **Level-Editor:** `saveLevel()` validiert Level vor Speichern
+- **Level-Editor:** Neue Tool: "Magie" (🟪) für magic_wall
+- **Hauptspiel:** magic_wall wie border behandelt (unzerstörbar)
+- **Hauptspiel:** magic_wall Rendering (lila mit Glanz)
+
+---
+
 ## v1.6.6 (25.10.2025) - Level-Editor Spieler-Rendering Fix
 
 ### 🐛 Bug Fix:
@@ -253,14 +281,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.6.6
-**Debug:** v1.6.6-debug
+**Stabil:** v1.6.7
+**Debug:** v1.6.7-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.6
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.6-debug
-- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.6
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.6
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.6.7
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.6.7-debug
+- [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.6.7
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.6.7
 
 ---
 

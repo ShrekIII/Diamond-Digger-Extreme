@@ -304,6 +304,9 @@
                     <div class="tool-btn" onclick="selectTool('border')" data-tool="border">
                         🟥<span class="label">Rand</span>
                     </div>
+                    <div class="tool-btn" onclick="selectTool('magic_wall')" data-tool="magic_wall">
+                        🟪<span class="label">Magie</span>
+                    </div>
                     <div class="tool-btn" onclick="selectTool('stone')" data-tool="stone">
                         🪨<span class="label">Stein</span>
                     </div>
@@ -497,6 +500,18 @@
                         ctx.strokeStyle = '#CD5C5C';
                         ctx.lineWidth = 2;
                         ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                    } else if (tile === 'magic_wall') {
+                        // Magische Wand (lila/magenta mit Glanz-Effekt)
+                        ctx.fillStyle = '#8B008B';
+                        ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
+                        // Hellerer magischer Glanz
+                        ctx.strokeStyle = '#FF00FF';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                        // Zusätzlicher innerer Glanz
+                        ctx.strokeStyle = '#FF69B4';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(px + 3, py + 3, GRID_SIZE - 6, GRID_SIZE - 6);
                     }
                     
                     // Gitter
@@ -580,6 +595,9 @@
                 case 'border':
                     levelData.tiles[y][x] = 'border';
                     break;
+                case 'magic_wall':
+                    levelData.tiles[y][x] = 'magic_wall';
+                    break;
                 case 'stone':
                     levelData.tiles[y][x] = 'empty';
                     levelData.objects.stones.push({ x, y });
@@ -648,8 +666,8 @@
         function fillEarth() {
             for (let y = 0; y < levelHeight; y++) {
                 for (let x = 0; x < levelWidth; x++) {
-                    if (x >= 2 && x < levelWidth - 2 && y >= 2 && y < levelHeight - 3) {
-                        if (levelData.tiles[y][x] !== 'wall') {
+                    if (x >= 2 && x < levelWidth - 2 && y >= 2 && y < levelHeight - 2) {
+                        if (levelData.tiles[y][x] !== 'border') {
                             levelData.tiles[y][x] = 'earth';
                         }
                     }
@@ -671,6 +689,25 @@
         }
         
         function saveLevel() {
+            // Validierung: Prüfe ob Spieler-Position auf 'empty' Tile ist
+            const playerTile = levelData.tiles[levelData.playerStart.y]?.[levelData.playerStart.x];
+            if (playerTile !== 'empty') {
+                alert('❌ FEHLER: Spieler-Position muss auf einem leeren Feld sein!\n\nBitte platziere den Spieler (🧙) auf einem leeren Feld.');
+                return;
+            }
+            
+            // Validierung: Prüfe ob Ausgang existiert und auf 'empty' Tile ist
+            if (!levelData.exit) {
+                alert('❌ FEHLER: Kein Ausgang platziert!\n\nBitte platziere einen Ausgang (🚪) im Level.');
+                return;
+            }
+            
+            const exitTile = levelData.tiles[levelData.exit.y]?.[levelData.exit.x];
+            if (exitTile !== 'empty') {
+                alert('❌ FEHLER: Ausgang-Position muss auf einem leeren Feld sein!\n\nBitte platziere den Ausgang (🚪) auf einem leeren Feld.');
+                return;
+            }
+            
             levelData.name = document.getElementById('levelName').value;
             levelData.requiredDiamonds = parseInt(document.getElementById('requiredDiamonds').value);
             const json = JSON.stringify(levelData, null, 2);
@@ -684,7 +721,7 @@
             a.click();
             URL.revokeObjectURL(url);
             
-            alert('Level gespeichert!');
+            alert('✅ Level gespeichert!');
         }
         
         function loadLevel() {
@@ -771,6 +808,6 @@
     </script>
     
     <!-- Version Badge -->
-    <div class="version-badge">v1.6.6</div>
+    <div class="version-badge">v1.6.7</div>
 </body>
 </html>

@@ -434,7 +434,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.6.6</div>
+        <div class="version-badge">v1.6.7</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -690,7 +690,8 @@
                 if (levelTiles.length > 0) {
                     for (let y = 0; y < levelTiles.length; y++) {
                         for (let x = 0; x < levelTiles[y].length; x++) {
-                            if (levelTiles[y][x] === 'border') {
+                            const tile = levelTiles[y][x];
+                            if (tile === 'border') {
                                 const px = x * GRID_SIZE - camera.x;
                                 const py = y * GRID_SIZE - camera.y;
                                 
@@ -702,6 +703,23 @@
                                     ctx.strokeStyle = '#CD5C5C';
                                     ctx.lineWidth = 2;
                                     ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                                }
+                            } else if (tile === 'magic_wall') {
+                                const px = x * GRID_SIZE - camera.x;
+                                const py = y * GRID_SIZE - camera.y;
+                                
+                                if (px + GRID_SIZE >= 0 && px < canvas.width && py + GRID_SIZE >= 0 && py < canvas.height) {
+                                    // Magische Wand (lila/magenta mit Glanz)
+                                    ctx.fillStyle = '#8B008B';
+                                    ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
+                                    // Magischer Glanz
+                                    ctx.strokeStyle = '#FF00FF';
+                                    ctx.lineWidth = 2;
+                                    ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                                    // Innerer Glanz
+                                    ctx.strokeStyle = '#FF69B4';
+                                    ctx.lineWidth = 1;
+                                    ctx.strokeRect(px + 3, py + 3, GRID_SIZE - 6, GRID_SIZE - 6);
                                 }
                             }
                         }
@@ -786,11 +804,12 @@
         }
         
         function isInWall(gridX, gridY) {
-            // Bei Custom Levels: Prüfe gegen border tiles
+            // Bei Custom Levels: Prüfe gegen border und magic_wall tiles
             if (usingCustomLevels && levelTiles.length > 0) {
                 if (gridY >= 0 && gridY < levelTiles.length && 
                     gridX >= 0 && gridX < levelTiles[0].length) {
-                    return levelTiles[gridY][gridX] === 'border';
+                    const tile = levelTiles[gridY][gridX];
+                    return tile === 'border' || tile === 'magic_wall';
                 }
                 return false; // Außerhalb des Level-Arrays
             }
@@ -2800,6 +2819,9 @@
                         // Border = unzerstörbare Wand (wie isInWall)
                         // Wird in isInWall-Prüfung durch levelTiles Array erkannt
                         // Keine health, kann nicht zerstört werden
+                    } else if (tile === 'magic_wall') {
+                        // Magic Wall = unzerstörbare magische Wand
+                        // Wird wie border behandelt, aber mit speziellem Verhalten
                     }
                     // 'earth' bleibt leer (default)
                 }
