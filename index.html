@@ -435,7 +435,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.7.0</div>
+        <div class="version-badge">v1.7.1</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -3158,6 +3158,7 @@
             hideMenu();
             resetGameStats();
             currentLevel = 0;
+            levelDisplay.textContent = '1';  // Tutorial startet bei 1 (visuell)
             gameOver = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
@@ -3181,17 +3182,29 @@
                     return response.json();
                 })
                 .then(levelData => {
-                    console.log(`✅ Tutorial ${tutorialNum} geladen`);
+                    console.log(`✅ Tutorial ${tutorialNum} geladen:`, levelData);
                     tutorialLevels[tutorialNum - 1] = levelData;  // 0-basiert
                     usingCustomLevels = true;
                     customLevels = tutorialLevels;  // Verwende Tutorial-Level
                     maxLevel = 4;  // 5 Tutorials (0-4)
+                    
+                    console.log(`📊 Tutorial-Status:`, {
+                        currentLevel,
+                        tutorialNum,
+                        levelIndex: tutorialNum - 1,
+                        levelData: tutorialLevels[tutorialNum - 1] ? 'vorhanden' : 'fehlt',
+                        gameStarted
+                    });
+                    
                     loadLevel(tutorialNum - 1);  // Starte bei 0
                     
                     if (!gameStarted) {
+                        console.log('🎬 Starte Game Loop...');
                         gameStarted = true;
                         lastFrameTime = performance.now();
                         requestAnimationFrame(gameLoop);
+                    } else {
+                        console.log('⚠️ Game Loop läuft bereits');
                     }
                 })
                 .catch(error => {
