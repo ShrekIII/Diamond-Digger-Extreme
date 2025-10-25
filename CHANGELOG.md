@@ -4,6 +4,46 @@
 
 ---
 
+## v1.10.0 (25.10.2025) - Diamond Digger Rebranding & Menu Music
+
+### ✨ UI/UX-Features:
+
+**1. "Level wiederholen" Button bei Game Over:**
+- Neuer Button "🔄 WIEDERHOLEN" links neben "HAUPTMENÜ"
+- Level wird neu geladen OHNE Highscore-Eintrag
+- `highscoreChecked = true` verhindert Bestenlisten-Eintrag
+- Perfekt zum Üben ohne Statistik zu verfälschen
+
+**2. Titel-Rebranding:**
+- ❌ Alt: "⛏️ TUNNEL GRABER ⛏️"
+- ✅ Neu: "💎 DIAMOND DIGGER 💎"
+- Browser-Tab: "Diamond Digger - Extreme Edition"
+
+**3. Menü-Hintergrundmusik:**
+- Neue Datei: `/music/menu_background.mp3` (3.0 MB)
+- Lautstärke: 30%
+- Loop: Endlosschleife
+- Auto-Start: Beim Menü öffnen
+- Auto-Stop: Beim Spiel/Tutorial starten
+
+### 📁 Neue Dateien:
+- `music/menu_background.mp3` - Menü-Hintergrundmusik
+
+### 📝 Änderungen:
+- `drawGameOver()`: Zwei Buttons (Wiederholen + Hauptmenü)
+- `canvas.click`: Handler für beide Buttons
+- `showMenu()`: Startet Musik (30% Volume)
+- `hideMenu()`: Stoppt Musik
+- HTML: Audio-Element hinzugefügt
+- Titel überall geändert
+
+### 🎯 Verhalten:
+- **Wiederholen**: Kein Highscore, nur Übung
+- **Hauptmenü**: Wie bisher, mit Stats
+- **Musik**: Spielt nur im Menü (nicht im Spiel)
+
+---
+
 ## v1.9.0 (25.10.2025) - UX-Verbesserungen & ESC-Funktion
 
 ### ✨ Gameplay-Features:
@@ -445,14 +485,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.9.0
-**Debug:** v1.9.0-debug
+**Stabil:** v1.10.0
+**Debug:** v1.10.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.9.0
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.9.0-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.10.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.10.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.9.0
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.10.0 (3.6 MB)
 
 ---
 

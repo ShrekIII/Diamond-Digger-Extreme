@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tunnel Graber Spiel</title>
+    <title>Diamond Digger - Extreme Edition</title>
     <style>
         * {
             margin: 0;
@@ -412,7 +412,7 @@
         <div class="menu-overlay"></div>
         <div class="menu-content">
             <div class="menu-left">
-                <h1 class="game-title">⛏️ TUNNEL GRABER ⛏️</h1>
+                <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
@@ -429,13 +429,23 @@
                     <div>⏱️ Zeit</div>
                     <div>📏 Weg</div>
                 </div>
+                <div id="highscoreList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menü Hintergrundmusik -->
+    <audio id="menuMusic" loop>
+        <source src="https://shrekiii.github.io/Diamond-Digger-Extreme/music/menu_background.mp3" type="audio/mpeg">
+    </audio>
+                </div>
                 <div class="highscore-list" id="highscoreList">
                     <!-- Highscores werden hier eingefügt -->
                 </div>
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.9.0</div>
+        <div class="version-badge">v1.10.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -2673,20 +2683,37 @@
             ctx.strokeText(`Distanz: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 105);
             ctx.fillText(`Distanz: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 105);
             
-            const buttonWidth = 200;
-            const buttonHeight = 60;
-            const buttonX = canvas.width / 2 - buttonWidth / 2;
-            const buttonY = canvas.height / 2 + 150;
+            // Button 1: Level wiederholen
+            const button1Width = 220;
+            const button1Height = 60;
+            const button1X = canvas.width / 2 - 230;
+            const button1Y = canvas.height / 2 + 150;
+            
+            ctx.fillStyle = '#2196F3';
+            ctx.fillRect(button1X, button1Y, button1Width, button1Height);
+            ctx.strokeStyle = '#0D47A1';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(button1X, button1Y, button1Width, button1Height);
+            
+            ctx.fillStyle = '#FFF';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText('🔄 WIEDERHOLEN', button1X + button1Width / 2, button1Y + button1Height / 2);
+            
+            // Button 2: Hauptmenü
+            const button2Width = 200;
+            const button2Height = 60;
+            const button2X = canvas.width / 2 + 30;
+            const button2Y = canvas.height / 2 + 150;
             
             ctx.fillStyle = '#4CAF50';
-            ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+            ctx.fillRect(button2X, button2Y, button2Width, button2Height);
             ctx.strokeStyle = '#2E7D32';
             ctx.lineWidth = 4;
-            ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+            ctx.strokeRect(button2X, button2Y, button2Width, button2Height);
             
             ctx.fillStyle = '#FFF';
             ctx.font = 'bold 28px Arial';
-            ctx.fillText('HAUPTMENÜ', canvas.width / 2, buttonY + buttonHeight / 2);
+            ctx.fillText('HAUPTMENÜ', button2X + button2Width / 2, button2Y + button2Height / 2);
         }
         
         document.addEventListener('keydown', (e) => {
@@ -2716,13 +2743,38 @@
                 const clickX = e.clientX - rect.left;
                 const clickY = e.clientY - rect.top;
                 
-                const buttonWidth = 200;
-                const buttonHeight = 60;
-                const buttonX = canvas.width / 2 - buttonWidth / 2;
-                const buttonY = canvas.height / 2 + 140;
+                // Button 1: Level wiederholen (links)
+                const button1Width = 220;
+                const button1Height = 60;
+                const button1X = canvas.width / 2 - 230;
+                const button1Y = canvas.height / 2 + 150;
                 
-                if (clickX >= buttonX && clickX <= buttonX + buttonWidth &&
-                    clickY >= buttonY && clickY <= buttonY + buttonHeight) {
+                if (clickX >= button1X && clickX <= button1X + button1Width &&
+                    clickY >= button1Y && clickY <= button1Y + button1Height) {
+                    // Level wiederholen - OHNE Highscore
+                    console.log('🔄 Level wiederholen - Highscore wird verhindert');
+                    gameOver = false;
+                    highscoreChecked = true;  // Verhindert Highscore-Prüfung!
+                    
+                    // Lade aktuelles Level neu (ohne currentLevel zu ändern)
+                    if (inTutorialMode) {
+                        loadTutorialFromGitHub(currentLevel);
+                    } else if (usingCustomLevels) {
+                        loadLevelByNumber(currentLevel);
+                    } else {
+                        loadLevelByNumber(currentLevel);
+                    }
+                    return;
+                }
+                
+                // Button 2: Hauptmenü (rechts)
+                const button2Width = 200;
+                const button2Height = 60;
+                const button2X = canvas.width / 2 + 30;
+                const button2Y = canvas.height / 2 + 150;
+                
+                if (clickX >= button2X && clickX <= button2X + button2Width &&
+                    clickY >= button2Y && clickY <= button2Y + button2Height) {
                     // Zurück zum Hauptmenü
                     gameOver = false;
                     highscoreChecked = false;  // Reset für nächstes Spiel
@@ -2959,6 +3011,13 @@
         // Lade Highscores beim Start
         loadHighscores();
         displayHighscores();
+        
+        // Initialisiere Menü-Musik (wird beim showMenu() gestartet)
+        const menuMusic = document.getElementById('menuMusic');
+        if (menuMusic) {
+            menuMusic.volume = 0.3;  // 30% Lautstärke
+            console.log('🎵 Menü-Musik initialisiert (30% Lautstärke)');
+        }
         
         // Setze Menü-Hintergrund (Bild muss im gleichen Verzeichnis liegen)
         const menuScreen = document.getElementById('menuScreen');
@@ -3371,10 +3430,27 @@
             
             // Schließe Name-Input Modal falls offen
             document.getElementById('nameInputModal').classList.remove('active');
+            
+            // Starte Menü-Musik mit 30% Lautstärke
+            const menuMusic = document.getElementById('menuMusic');
+            if (menuMusic) {
+                menuMusic.volume = 0.3;  // 30% Lautstärke
+                menuMusic.play().catch(err => {
+                    console.log('🎵 Autoplay verhindert - Musik startet nach User-Interaktion');
+                });
+            }
         }
         
         function hideMenu() {
             document.getElementById('menuScreen').classList.remove('active');
+            
+            // Stoppe Menü-Musik
+            const menuMusic = document.getElementById('menuMusic');
+            if (menuMusic) {
+                menuMusic.pause();
+                menuMusic.currentTime = 0;  // Zurücksetzen
+            }
+            
             // gameStarted wird von den Start-Funktionen gesetzt (startGame/startTutorial)
         }
         
