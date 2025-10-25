@@ -435,7 +435,7 @@
             </div>
         </div>
         <!-- Version Badge -->
-        <div class="version-badge">v1.8.2</div>
+        <div class="version-badge">v1.9.0</div>
     </div>
     
     <!-- Name Input Modal -->
@@ -602,11 +602,27 @@
         const wallColors = ['#4a4a4a', '#5a5a5a', '#6a6a6a', '#555555', '#505050'];
         
         function updateCamera() {
-            camera.x = player.x - canvas.width / 2;
-            camera.y = player.y - canvas.height / 2;
+            const worldPixelWidth = WORLD_WIDTH * GRID_SIZE;
+            const worldPixelHeight = WORLD_HEIGHT * GRID_SIZE;
             
-            camera.x = Math.max(0, Math.min(camera.x, WORLD_WIDTH * GRID_SIZE - canvas.width));
-            camera.y = Math.max(0, Math.min(camera.y, WORLD_HEIGHT * GRID_SIZE - canvas.height));
+            // Wenn Level kleiner als Canvas: Zentriere Level
+            if (worldPixelWidth < canvas.width) {
+                // Level ist schmaler als Canvas → Zentriere horizontal
+                camera.x = -(canvas.width - worldPixelWidth) / 2;
+            } else {
+                // Normal: Folge Spieler
+                camera.x = player.x - canvas.width / 2;
+                camera.x = Math.max(0, Math.min(camera.x, worldPixelWidth - canvas.width));
+            }
+            
+            if (worldPixelHeight < canvas.height) {
+                // Level ist kleiner als Canvas → Zentriere vertikal
+                camera.y = -(canvas.height - worldPixelHeight) / 2;
+            } else {
+                // Normal: Folge Spieler
+                camera.y = player.y - canvas.height / 2;
+                camera.y = Math.max(0, Math.min(camera.y, worldPixelHeight - canvas.height));
+            }
         }
         
         function createStaticBackground() {
@@ -2674,6 +2690,13 @@
         }
         
         document.addEventListener('keydown', (e) => {
+            // ESCAPE drücken → Spieler stirbt
+            if (e.key === 'Escape' && gameStarted && !gameOver && !gameCompleted) {
+                gameOver = true;
+                gameOverReason = '🚪 Aufgegeben (ESC)';
+                console.log('⚠️ Spieler hat ESC gedrückt - Game Over');
+            }
+            
             if (keys.hasOwnProperty(e.key)) {
                 e.preventDefault();
                 keys[e.key] = true;
@@ -2886,7 +2909,7 @@
             }
             
             if (gameOver) {
-                // Prüfe Highscore nur einmal
+                // Prüfe Highscore nur einmal UND NUR wenn NICHT im Tutorial-Modus
                 if (!highscoreChecked) {
                     highscoreChecked = true;
                     
@@ -2895,8 +2918,8 @@
                     finalStats.totalLevelsCompleted = currentLevel;
                     finalStats.totalDistanceTraveled = totalDistance;
                     
-                    // Prüfe ob Highscore erreicht wurde
-                    if (checkHighscore()) {
+                    // Prüfe ob Highscore erreicht wurde (nur im Normal-Modus, NICHT im Tutorial!)
+                    if (!inTutorialMode && checkHighscore()) {
                         console.log('🏆 HIGHSCORE erreicht!');
                         showNameInput();
                     } else {

@@ -4,6 +4,38 @@
 
 ---
 
+## v1.9.0 (25.10.2025) - UX-Verbesserungen & ESC-Funktion
+
+### ✨ Gameplay-Features:
+
+**1. Kein Highscore im Tutorial-Modus:**
+- Tutorial-Level generieren KEINEN Highscore-Eintrag
+- Gilt sowohl für Completion als auch Game Over
+- Nur echte Level (level_00.json, level_01.json, etc.) erzeugen Highscores
+
+**2. Level-Zentrierung:**
+- Kleine Level werden automatisch zentriert
+- Wenn Level schmaler als Browser: horizontal zentriert
+- Wenn Level kleiner als Browser: vertikal zentriert
+- Beispiel: level_00.json (13x11) wird zentriert dargestellt
+
+**3. ESC-Taste zum Aufgeben:**
+- ESC drücken → Spieler stirbt sofort
+- Game Over Grund: "🚪 Aufgegeben (ESC)"
+- Funktioniert nur während aktivem Spiel (nicht im Menü)
+
+### 📝 Änderungen:
+- `drawGameOver()`: Prüft `!inTutorialMode` vor Highscore-Check
+- `updateCamera()`: Zentriert Level wenn kleiner als Canvas
+- `keydown` Event: ESC-Taste löst Game Over aus
+
+### 🎯 Verhalten:
+- Tutorial: Kein Highscore bei Abschluss oder Tod
+- Kleine Level: Zentriert in großen Browsern
+- ESC: Schnelles Aufgeben ohne Warten
+
+---
+
 ## v1.8.2 (25.10.2025) - Level & Tutorial Updates
 
 ### 📁 Level-Dateien aktualisiert:
@@ -413,14 +445,14 @@
 
 ## 📥 AKTUELLE VERSION
 
-**Stabil:** v1.8.2
-**Debug:** v1.8.2-debug
+**Stabil:** v1.9.0
+**Debug:** v1.9.0-debug
 
 **Download:**
-- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.8.2
-- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.8.2-debug
+- [tunnel_game.html](computer:///mnt/user-data/outputs/tunnel_game.html) - v1.9.0
+- [tunnel_game_debug.html](computer:///mnt/user-data/outputs/tunnel_game_debug.html) - v1.9.0-debug
 - [level_editor.html](computer:///mnt/user-data/outputs/level_editor.html) - v1.7.0
-- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.8.2
+- [github-release.zip](computer:///mnt/user-data/outputs/github-release.zip) - v1.9.0
 
 ---
 
