@@ -662,23 +662,8 @@
                         rotation: rotationSteps
                     });
                     
-                    // Wähle das richtige Erd-Sprite
-                    let earthSprite;
-                    switch(textureIndex) {
-                        case 1: earthSprite = earthImg1; break;
-                        case 2: earthSprite = earthImg2; break;
-                        case 3: earthSprite = earthImg3; break;
-                        case 4: earthSprite = earthImg4; break;
-                        case 5: earthSprite = earthImg5; break;
-                        case 6: earthSprite = earthImg6; break;
-                        case 7: earthSprite = earthImg7; break;
-                        case 8: earthSprite = earthImg8; break;
-                        case 9: earthSprite = earthImg9; break;
-                        case 10: earthSprite = earthImg10; break;
-                        case 11: earthSprite = earthImg11; break;
-                        case 12: earthSprite = earthImg12; break;
-                        default: earthSprite = earthImg1;
-                    }
+                    // Wähle das richtige Erd-Sprite aus Array (1-indexed zu 0-indexed)
+                    const earthSprite = earthImages[textureIndex - 1] || earthImages[0];
                     
                     const x = col * GRID_SIZE;
                     const y = row * GRID_SIZE;
@@ -3465,15 +3450,15 @@
         
         function displayHighscores() {
             const list = document.getElementById('highscoreList');
-            if (!list) return;
+            if (!list) {
+                console.error('❌ highscoreList element not found!');
+                return;
+            }
             
-            console.log('📊 Display Highscores:', highscores.length, 'Einträge');
-            highscores.forEach((entry, i) => {
-                console.log(`  ${i+1}. Name: "${entry.name}", 💎${entry.diamonds}, Level ${entry.level}`);
-            });
+            console.log('📊 Display Highscores:', highscores.length, 'entries');
             
             if (highscores.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: #888; padding: 50px;">Noch keine Einträge</div>';
+                list.innerHTML = '<div class="highscore-entry"><div class="highscore-row" style="justify-content: center; color: #888; padding: 20px;">No highscores yet - play and set a record! 🎮</div></div>';
                 return;
             }
             
@@ -3484,7 +3469,7 @@
                 <div class="highscore-entry ${index === 0 ? 'rank-1' : ''}">
                     <div class="highscore-row">
                         <div class="rank">${index + 1}</div>
-                        <div class="player-name">${entry.name || 'Unbekannt'}</div>
+                        <div class="player-name">${entry.name || 'Anonymous'}</div>
                         <div class="score-value">${entry.diamonds}</div>
                         <div class="score-value">${entry.level}</div>
                         <div class="score-value">${Math.round(entry.time)}s</div>
