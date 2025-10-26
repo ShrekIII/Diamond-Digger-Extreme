@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.15.2</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.16.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -2342,7 +2342,7 @@
         for (let i = 1; i <= 6; i++) {
             const audio = new Audio();
             audio.src = `sfx/rock_${i}.mp3`;
-            audio.volume = 0.4;  // 40% Lautstärke (Graben/Bewegung)
+            audio.volume = 0.15;  // 15% Lautstärke (Graben/Bewegung)
             sfx.pick.push(audio);
         }
         
@@ -2386,6 +2386,32 @@
             if (!sound) return;
             sound.currentTime = 0;
             sound.play().catch(e => console.log('Sound play error:', e));
+        }
+        
+        // Helper: Stoppe alle Sounds (bei Level Complete)
+        function stopAllSounds() {
+            // Stoppe alle Rock Sounds
+            sfx.rock.forEach(sound => {
+                sound.pause();
+                sound.currentTime = 0;
+            });
+            // Stoppe alle Pick Sounds
+            sfx.pick.forEach(sound => {
+                sound.pause();
+                sound.currentTime = 0;
+            });
+            // Stoppe alle Diamond Sounds
+            sfx.diamond.forEach(sound => {
+                sound.pause();
+                sound.currentTime = 0;
+            });
+            // Stoppe einzelne Sounds
+            if (sfx.countdown) { sfx.countdown.pause(); sfx.countdown.currentTime = 0; }
+            if (sfx.startGame) { sfx.startGame.pause(); sfx.startGame.currentTime = 0; }
+            if (sfx.doorOpen) { sfx.doorOpen.pause(); sfx.doorOpen.currentTime = 0; }
+            if (sfx.explosion) { sfx.explosion.pause(); sfx.explosion.currentTime = 0; }
+            if (sfx.diamonds) { sfx.diamonds.pause(); sfx.diamonds.currentTime = 0; }
+            if (sfx.suicide) { sfx.suicide.pause(); sfx.suicide.currentTime = 0; }
         }
         
 
@@ -2494,14 +2520,14 @@
         function movePlayer(currentTime) {
             if (gameOver) return;
             
-            // Prüfe ob 2 Sekunden seit Level-Start vergangen sind
+            // Prüfe ob 3 Sekunden seit Level-Start vergangen sind
             if (!playerCanMove) {
-                if (currentTime - levelStartTime >= 2000) {
+                if (currentTime - levelStartTime >= 3000) {
                     playerCanMove = true;
                     playSound(sfx.startGame);  // 🎮 Spiel startet!
                     console.log('✅ Spieler kann sich jetzt bewegen');
                 } else {
-                    return;  // Noch keine 2 Sekunden vergangen
+                    return;  // Noch keine 3 Sekunden vergangen
                 }
             }
             
@@ -2776,6 +2802,7 @@
                     
                     if (exitOpen && exitPosition && 
                         newGridX === getExitX() && newGridY === getExitY()) {
+                        stopAllSounds();  // 🔇 Stoppe alle spielenden Sounds
                         nextLevel();
                     }
                     
@@ -2974,7 +3001,9 @@
                     // Tutorial-Modus: Lade Tutorial-Level (nutze currentTutorialLevel)
                     if (tutorialLevels[currentLevel]) {
                         console.log(`✅ Tutorial ${currentTutorialLevel} bereits im Cache`);
-                        loadLevel(currentLevel);
+                        // Zeige Mission Screen auch bei gecachten Tutorials
+                        const levelData = tutorialLevels[currentLevel];
+                        showTutorialMissionScreen(levelData, currentTutorialLevel);
                     } else {
                         console.log(`📥 Lade Tutorial ${currentTutorialLevel} von GitHub...`);
                         loadTutorialFromGitHub(currentTutorialLevel);
@@ -3077,7 +3106,7 @@
             
             drawPlayer();
 
-            // Blink-Effekt während Wartezeit (2 Sekunden am Level-Start)
+            // Blink-Effekt während Wartezeit (3 Sekunden am Level-Start)
             if (!playerCanMove && !gameOver) {
                 const elapsed = currentTime - levelStartTime;
                 // Blinke alle 250ms (4x pro Sekunde)
@@ -3089,7 +3118,7 @@
                 }
                 
                 // Zeige animierten Countdown als obersten Layer
-                const remainingSeconds = Math.ceil((2000 - elapsed) / 1000);
+                const remainingSeconds = Math.ceil((3000 - elapsed) / 1000);
                 
                 // Spiele Countdown-Sound wenn Zahl wechselt
                 if (remainingSeconds > 0 && remainingSeconds !== lastCountdownValue) {
@@ -3856,22 +3885,91 @@
                         gameStarted
                     });
                     
-                    loadLevel(tutorialNum - 1);  // Starte bei 0
-                    
-                    if (!gameStarted) {
-                        console.log('🎬 Starte Game Loop...');
-                        gameStarted = true;
-                        lastFrameTime = performance.now();
-                        requestAnimationFrame(gameLoop);
-                    } else {
-                        console.log('⚠️ Game Loop läuft bereits');
-                    }
+                    // Zeige Mission Screen BEVOR Tutorial startet
+                    showTutorialMissionScreen(levelData, tutorialNum);
                 })
                 .catch(error => {
                     console.error('❌ Fehler beim Laden des Tutorials:', error);
                     alert('Fehler: Tutorial konnte nicht geladen werden!\n' + error.message);
                     showMenu();
                 });
+        }
+        
+        // Zeige Tutorial Mission Screen
+        function showTutorialMissionScreen(levelData, tutorialNum) {
+            // Erstelle Modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+                padding: 60px 80px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 700px;
+                border: 4px solid #FFD700;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+            `;
+            
+            const missionName = levelData.name || `Tutorial ${tutorialNum}`;
+            
+            content.innerHTML = `
+                <h1 style="color: #FFD700; font-size: 36px; margin: 0 0 15px 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); letter-spacing: 2px;">
+                    📚 MISSION
+                </h1>
+                <h2 style="color: #FFFFFF; font-size: 48px; margin: 20px 0 40px 0; line-height: 1.4; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                    ${missionName}
+                </h2>
+                <button id="missionOkBtn" style="
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    color: #000;
+                    border: none;
+                    padding: 20px 80px;
+                    font-size: 28px;
+                    font-weight: bold;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 25px rgba(255, 215, 0, 0.7)';"
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 215, 0, 0.4)';">
+                    OK
+                </button>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            // OK Button Handler
+            document.getElementById('missionOkBtn').addEventListener('click', () => {
+                modal.remove();
+                
+                // JETZT starte das Tutorial
+                loadLevel(tutorialNum - 1);  // Starte bei 0
+                
+                if (!gameStarted) {
+                    console.log('🎬 Starte Game Loop...');
+                    gameStarted = true;
+                    lastFrameTime = performance.now();
+                    requestAnimationFrame(gameLoop);
+                } else {
+                    console.log('⚠️ Game Loop läuft bereits');
+                }
+            });
         }
         
         // Neue Funktion: Level von GitHub laden
