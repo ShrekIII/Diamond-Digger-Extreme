@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.16.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.16.1</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -2342,7 +2342,7 @@
         for (let i = 1; i <= 6; i++) {
             const audio = new Audio();
             audio.src = `sfx/rock_${i}.mp3`;
-            audio.volume = 0.15;  // 15% Lautstärke (Graben/Bewegung)
+            audio.volume = 0.05;  // 5% Lautstärke (Graben/Bewegung)
             sfx.pick.push(audio);
         }
         
@@ -2623,10 +2623,12 @@
                             
                             // Prüfe ob alle Diamanten gesammelt wurden
                             if (diamondsCollected >= totalDiamonds) {
+                                if (!exitOpen) {  // Nur wenn vorher geschlossen
+                                    playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
+                                    flashEffect = true;
+                                    flashStartTime = currentTime;
+                                }
                                 exitOpen = true;
-                                playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
-                                flashEffect = true;
-                                flashStartTime = currentTime;
                             }
                         } else {
                             // PRIORITÄT 3: Wenn weder Stein noch Diamant - grabe Erdfeld aus
@@ -2782,10 +2784,12 @@
                         totalCollectedDisplay.textContent = totalDiamondsCollectedAllTime;
                         
                         if (diamondsCollected >= totalDiamonds) {
+                            if (!exitOpen) {  // Nur wenn vorher geschlossen
+                                playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
+                                flashEffect = true;
+                                flashStartTime = currentTime;
+                            }
                             exitOpen = true;
-                            playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
-                            flashEffect = true;
-                            flashStartTime = currentTime;
                         }
                     }
                     
@@ -2964,8 +2968,8 @@
                 currentLevel++;
             }
             
-            // Prüfe ob alle Tutorials abgeschlossen (5 Tutorials total)
-            if (inTutorialMode && currentTutorialLevel > 5) {
+            // Prüfe ob alle Tutorials abgeschlossen (4 Tutorials total)
+            if (inTutorialMode && currentTutorialLevel > 4) {
                 showTutorialCompletionScreen();
                 return;
             }
@@ -2976,9 +2980,9 @@
                 return;
             }
             
-            // Update Level Display (zeige "Tutorial X/5" oder "Level X")
+            // Update Level Display (zeige "Tutorial X/4" oder "Level X")
             if (inTutorialMode) {
-                levelDisplay.textContent = `${currentTutorialLevel}/5`;
+                levelDisplay.textContent = `${currentTutorialLevel}/4`;
             } else {
                 levelDisplay.textContent = currentLevel;
             }
@@ -3827,9 +3831,11 @@
             hideMenu();
             resetGameStats();
             currentLevel = 0;  // Startet mit Level 0!
+            currentTutorialLevel = 1;  // Reset Tutorial Counter
             gameOver = false;
             highscoreChecked = false;
-            inTutorialMode = false;  // Kein Tutorial
+            inTutorialMode = false;  // Kein Tutorial - WICHTIG!
+            tutorialLevels = [];  // Clear Tutorial Cache
             gameStarted = false;  // Wird in loadLevelFromGitHub gesetzt
             
             // Lade Level 0 von GitHub
@@ -3846,7 +3852,7 @@
             resetGameStats();
             currentLevel = 0;
             currentTutorialLevel = 1;  // Start bei Tutorial 1
-            levelDisplay.textContent = '1/5';
+            levelDisplay.textContent = '1/4';
             gameOver = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
