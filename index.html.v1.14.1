@@ -413,21 +413,21 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.14.2</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.14.0</p>
                 <div class="menu-buttons">
-                    <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
-                    <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
+                    <button class="menu-btn" onclick="startGame()">▶ Spiel Starten</button>
+                    <button class="menu-btn" onclick="startTutorial()">📚 Tutorial Starten</button>
                 </div>
             </div>
             <div class="menu-right">
-                <h2 class="highscore-title">🏆 HIGHSCORE 🏆</h2>
+                <h2 class="highscore-title">🏆 BESTENLISTE 🏆</h2>
                 <div class="highscore-header">
                     <div>#</div>
-                    <div>Player</div>
+                    <div>Spieler</div>
                     <div>💎</div>
                     <div>Level</div>
-                    <div>⏱️ Time</div>
-                    <div>📏 Distance</div>
+                    <div>⏱️ Zeit</div>
+                    <div>📏 Weg</div>
                 </div>
                 <div id="highscoreList"></div>
             </div>
@@ -451,10 +451,10 @@
     <!-- Name Input Modal -->
     <div class="name-input-modal" id="nameInputModal">
         <div class="name-input-content">
-            <h2>🎉 HIGHSCORE! 🎉</h2>
-            <p>Enter your name:</p>
-            <input type="text" id="playerNameInput" maxlength="15" placeholder="Your name (max 15 characters)" />
-            <button class="completion-btn primary" onclick="saveHighscore()">💾 Save</button>
+            <h2>🎉 NEUER HIGHSCORE! 🎉</h2>
+            <p>Gib deinen Namen ein:</p>
+            <input type="text" id="playerNameInput" maxlength="15" placeholder="Dein Name (max 15 Zeichen)" />
+            <button class="completion-btn primary" onclick="saveHighscore()">💾 Speichern</button>
         </div>
     </div>
     
@@ -463,10 +463,10 @@
     <div class="status-bar">
         <div class="stats">
             <div class="stat-item">Level: <span id="level">1</span></div>
-            <div class="stat-item">⏱️ Time: <span id="timer">60</span>s</div>
+            <div class="stat-item">⏱️ Zeit: <span id="timer">60</span>s</div>
             <div class="stat-item">💎 <span id="diamonds">0</span>/<span id="totalDiamondsNeeded">0</span></div>
-            <div class="stat-item">⭐ Diamonds collected: <span id="totalCollected">0</span></div>
-            <div class="stat-item">📏 Distance: <span id="distance">0</span> m</div>
+            <div class="stat-item">⭐ Gesamt: <span id="totalCollected">0</span></div>
+            <div class="stat-item">📏 Distanz: <span id="distance">0</span> m</div>
         </div>
     </div>
     
@@ -1189,7 +1189,7 @@
                         // Prüfe Kollision mit Spieler im Zielfeld
                         if (obstacle.gridX === playerGridX && belowGridY === playerGridY) {
                             gameOver = true;
-                            gameOverReason = '🪨 Hit by rock!';
+                            gameOverReason = '🪨 Von einem Stein getroffen!';
                         }
                         
                         // Bewege Stein ein Feld nach unten
@@ -1429,7 +1429,7 @@
                         // Prüfe Kollision mit Spieler im Zielfeld
                         if (diamond.gridX === playerGridX && belowGridY === playerGridY) {
                             gameOver = true;
-                            gameOverReason = '💎 Hit by diamond!';
+                            gameOverReason = '💎 Von einem Diamanten getroffen!';
                         }
                         
                         // Bewege Diamant ein Feld nach unten
@@ -1582,7 +1582,7 @@
             if (playerDist === 1) {
                 // Spieler ist 1 Feld entfernt - stirbt durch Explosion
                 gameOver = true;
-                gameOverReason = '💥 Killed by corpse explosion!';
+                gameOverReason = '💥 Von Monster-Explosion getötet!';
             }
             
             if (monster.type === 'tnt') {
@@ -1651,7 +1651,7 @@
                                         const playerDist2 = Math.max(Math.abs(playerGridX - otherMonster.gridX), Math.abs(playerGridY - otherMonster.gridY));
                                         if (playerDist2 === 1) {
                                             gameOver = true;
-                                            gameOverReason = '💥 Killed by chain reaction!';
+                                            gameOverReason = '💥 Von Kettenreaktion getötet!';
                                         }
                                         
                                         // Rekursive Kettenreaktion
@@ -1724,7 +1724,7 @@
                                         const playerDist2 = Math.max(Math.abs(playerGridX - otherMonster.gridX), Math.abs(playerGridY - otherMonster.gridY));
                                         if (playerDist2 === 1) {
                                             gameOver = true;
-                                            gameOverReason = '💥 Killed by chain reaction!';
+                                            gameOverReason = '💥 Von Kettenreaktion getötet!';
                                         }
                                         
                                         // Rekursive Kettenreaktion
@@ -1788,7 +1788,7 @@
                     // PRÄ-KOLLISIONSPRÜFUNG: Prüfe ob Monster bereits auf Spieler steht
                     if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
                         gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        gameOverReason = '👾 Von einem Monster erwischt!';
                         return;
                     }
                     
@@ -1806,7 +1806,7 @@
                             // Verhindert "Durchkreuzen" wenn Spieler und Monster gleichzeitig bewegen
                             if (newX === playerGridX && newY === playerGridY) {
                                 gameOver = true;
-                                gameOverReason = '👾 Killed by monster!';
+                                gameOverReason = '👾 Von einem Monster erwischt!';
                                 return;
                             }
                             
@@ -1817,7 +1817,7 @@
                             // POST-Kollisionsprüfung (doppelte Absicherung)
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
                                 gameOver = true;
-                                gameOverReason = '👾 Killed by monster!';
+                                gameOverReason = '👾 Von einem Monster erwischt!';
                             }
                             return; // Fertig mit diesem Monster
                         } else {
@@ -1834,7 +1834,7 @@
                             // Verhindert "Durchkreuzen" wenn Spieler und Monster gleichzeitig bewegen
                             if (newX === playerGridX && newY === playerGridY) {
                                 gameOver = true;
-                                gameOverReason = '💣 Killed by monster!';
+                                gameOverReason = '💣 Von einem Sprengmonster erwischt!';
                                 return;
                             }
                             
@@ -1845,7 +1845,7 @@
                             // POST-Kollisionsprüfung (doppelte Absicherung)
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
                                 gameOver = true;
-                                gameOverReason = '💣 Killed by monster!';
+                                gameOverReason = '💣 Von einem Sprengmonster erwischt!';
                             }
                             return; // Fertig mit diesem Monster
                         } else {
@@ -1883,7 +1883,7 @@
                     // KRITISCH: Prüfe VORHER ob Spieler auf Zielfeld ist
                     if (newX === playerGridX && newY === playerGridY) {
                         gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        gameOverReason = '👾 Von einem Monster erwischt!';
                         return;
                     }
                     
@@ -1909,7 +1909,7 @@
                         // POST-Kollisionsprüfung nach Bewegung (doppelte Absicherung)
                         if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
                             gameOver = true;
-                            gameOverReason = '👾 Killed by monster!';
+                            gameOverReason = '👾 Von einem Monster erwischt!';
                         }
                     }
                 }
@@ -2655,7 +2655,7 @@
                     
                     if (hasMonster) {
                         gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        gameOverReason = '👾 Von einem Monster erwischt!';
                         return; // Bewegung wird abgebrochen
                     }
                     
@@ -2698,7 +2698,7 @@
                     
                     if (postMonsterCheck) {
                         gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        gameOverReason = '👾 Von einem Monster erwischt!';
                         return;
                     }
                     
@@ -2735,18 +2735,20 @@
             ctx.fillStyle = '#FFF';
             ctx.font = 'bold 28px Arial';
             const finalScore = Math.floor(totalDistance / 10);
-            ctx.strokeText(`Reached level: ${currentLevel}`, canvas.width / 2, canvas.height / 2 - 20);
-            ctx.fillText(`Reached level: ${currentLevel}`, canvas.width / 2, canvas.height / 2 - 20);
+            ctx.strokeText(`Level erreicht: ${currentLevel}`, canvas.width / 2, canvas.height / 2 - 20);
+            ctx.fillText(`Level erreicht: ${currentLevel}`, canvas.width / 2, canvas.height / 2 - 20);
+            ctx.strokeText(`Diamanten im Level: ${diamondsCollected}`, canvas.width / 2, canvas.height / 2 + 20);
+            ctx.fillText(`Diamanten im Level: ${diamondsCollected}`, canvas.width / 2, canvas.height / 2 + 20);
             
             ctx.fillStyle = '#FFD700';
             ctx.font = 'bold 32px Arial';
-            ctx.strokeText(`⭐ ${totalDiamondsCollectedAllTime} ⭐`, canvas.width / 2, canvas.height / 2 + 40);
-            ctx.fillText(`⭐ ${totalDiamondsCollectedAllTime} ⭐`, canvas.width / 2, canvas.height / 2 + 40);
+            ctx.strokeText(`⭐ Gesamt gesammelt: ${totalDiamondsCollectedAllTime} ⭐`, canvas.width / 2, canvas.height / 2 + 65);
+            ctx.fillText(`⭐ Gesamt gesammelt: ${totalDiamondsCollectedAllTime} ⭐`, canvas.width / 2, canvas.height / 2 + 65);
             
             ctx.fillStyle = '#FFF';
             ctx.font = 'bold 24px Arial';
-            ctx.strokeText(`Distance: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 85);
-            ctx.fillText(`Distance: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 85);
+            ctx.strokeText(`Distanz: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 105);
+            ctx.fillText(`Distanz: ${finalScore} Meter`, canvas.width / 2, canvas.height / 2 + 105);
             
             // Button 1: Level wiederholen
             const button1Width = 220;
@@ -2762,9 +2764,9 @@
             
             ctx.fillStyle = '#FFF';
             ctx.font = 'bold 24px Arial';
-            ctx.fillText('🔄 RETRY LEVEL', button1X + button1Width / 2, button1Y + button1Height / 2);
+            ctx.fillText('🔄 WIEDERHOLEN', button1X + button1Width / 2, button1Y + button1Height / 2);
             
-            // Button 2: Main Menu
+            // Button 2: Hauptmenü
             const button2Width = 200;
             const button2Height = 60;
             const button2X = canvas.width / 2 + 30;
@@ -2778,14 +2780,14 @@
             
             ctx.fillStyle = '#FFF';
             ctx.font = 'bold 28px Arial';
-            ctx.fillText('MAIN MENU', button2X + button2Width / 2, button2Y + button2Height / 2);
+            ctx.fillText('HAUPTMENÜ', button2X + button2Width / 2, button2Y + button2Height / 2);
         }
         
         document.addEventListener('keydown', (e) => {
             // ESCAPE drücken → Spieler stirbt
             if (e.key === 'Escape' && gameStarted && !gameOver && !gameCompleted) {
                 gameOver = true;
-                gameOverReason = '🚪 Suicide';
+                gameOverReason = '🚪 Aufgegeben (ESC)';
                 console.log('⚠️ Spieler hat ESC gedrückt - Game Over');
             }
             
@@ -2983,49 +2985,18 @@
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
                 
-                // Zeige animierten Countdown als obersten Layer
+                // Zeige Countdown-Text
                 const remainingSeconds = Math.ceil((2000 - elapsed) / 1000);
                 if (remainingSeconds > 0) {
-                    // Berechne Animation-Progress innerhalb der aktuellen Sekunde
-                    const secondProgress = (elapsed % 1000) / 1000; // 0.0 bis 1.0
-                    
-                    // Zoom-Animation: Start groß (2.5x), zoom zu normal (1.0x)
-                    const scale = 2.5 - (secondProgress * 1.5); // 2.5 → 1.0
-                    
-                    // Opacity-Animation: Start transparent, fade to solid
-                    const opacity = 0.3 + (secondProgress * 0.7); // 0.3 → 1.0
-                    
-                    // Zeichne die Countdown-Zahl
-                    ctx.save();
-                    ctx.translate(canvas.width / 2, canvas.height / 2);
-                    ctx.scale(scale, scale);
-                    
-                    // Schatten für bessere Lesbarkeit
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-                    ctx.shadowBlur = 20;
-                    ctx.shadowOffsetX = 0;
-                    ctx.shadowOffsetY = 0;
-                    
-                    // Schwarzer Stroke
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = 8 / scale; // Kompensiere Scale
-                    ctx.font = `bold ${120}px Arial`;
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = 'bold 48px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    
-                    const text = remainingSeconds.toString();
-                    ctx.globalAlpha = opacity;
-                    ctx.strokeText(text, 0, 0);
-                    
-                    // Goldener Fill mit Gradient
-                    const gradient = ctx.createLinearGradient(0, -60, 0, 60);
-                    gradient.addColorStop(0, '#FFD700');
-                    gradient.addColorStop(0.5, '#FFA500');
-                    gradient.addColorStop(1, '#FF8C00');
-                    ctx.fillStyle = gradient;
-                    ctx.fillText(text, 0, 0);
-                    
-                    ctx.restore();
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 4;
+                    const text = `Bereit? ${remainingSeconds}...`;
+                    ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
+                    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
                 }
             }
             
@@ -3055,7 +3026,7 @@
                     // Timer abgelaufen - Game Over
                     if (timeRemaining <= 0) {
                         gameOver = true;
-                        gameOverReason = '⏱️ Time ran out!';
+                        gameOverReason = '⏱️ Zeit abgelaufen!';
                         timerRunning = false;
                     }
                 }
@@ -3580,9 +3551,9 @@
             // Schließe Name-Input Modal falls offen
             document.getElementById('nameInputModal').classList.remove('active');
             
-            // Stoppe Ingame-Musik und setze zurück
+            // Stoppe Ingame-Musik
             const ingameMusic = document.getElementById('ingameMusic');
-            if (ingameMusic && !ingameMusic.paused) {
+            if (ingameMusic) {
                 ingameMusic.pause();
                 ingameMusic.currentTime = 0;
             }
@@ -3592,10 +3563,6 @@
             if (menuMusic) {
                 menuMusic.volume = 0.2;  // 20% Lautstärke
                 menuMusic.muted = false;  // Falls gemuted
-                // Setze auf Anfang zurück wenn aus Spiel kommend
-                if (ingameMusic && !ingameMusic.paused) {
-                    menuMusic.currentTime = 0;
-                }
                 if (menuMusic.paused) {
                     menuMusic.play().catch(err => {
                         console.log('🎵 Menü-Musik konnte nicht gestartet werden');
@@ -3607,17 +3574,17 @@
         function hideMenu() {
             document.getElementById('menuScreen').classList.remove('active');
             
-            // Pausiere Menü-Musik (ohne Reset beim ersten Start)
+            // Pausiere Menü-Musik (nicht stoppen, damit Position erhalten bleibt)
             const menuMusic = document.getElementById('menuMusic');
-            if (menuMusic && !menuMusic.paused) {
+            if (menuMusic) {
                 menuMusic.pause();
+                menuMusic.currentTime = 0;  // Zurücksetzen
             }
             
             // Starte Ingame-Musik mit 15% Lautstärke
             const ingameMusic = document.getElementById('ingameMusic');
             if (ingameMusic) {
                 ingameMusic.volume = 0.15;  // 15% Lautstärke
-                ingameMusic.currentTime = 0;  // Immer von vorne starten
                 ingameMusic.play().catch(err => {
                     console.log('🎵 Ingame-Musik Autoplay verhindert');
                 });

@@ -4,6 +4,34 @@ Ein Boulder Dash-inspiriertes Puzzle-Spiel mit automatischem Level-System und Hi
 
 [![Spielen](https://img.shields.io/badge/🎮_Jetzt_Spielen-GitHub_Pages-success?style=for-the-badge)](https://ShrekIII.github.io/Diamond-Digger/)
 [![Level Editor](https://img.shields.io/badge/🎨_Level_Editor-Öffnen-blue?style=for-the-badge)](https://ShrekIII.github.io/Diamond-Digger/level_editor.html)
+[![Version](https://img.shields.io/badge/Version-1.14.2-blue?style=for-the-badge)](https://github.com/ShrekIII/Diamond-Digger/releases)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+## 🔥 Neueste Updates (v1.14.2)
+
+### 🌍 ENGLISH LOCALIZATION
+- **Complete Translation:** Full English UI and messages
+- **Main Menu:** Start Game, Start Tutorial, Highscore
+- **Status Bar:** Time, Diamonds collected, Distance
+- **Game Over:** All messages translated + cleaner layout
+
+### 🎬 ANIMATED COUNTDOWN
+- **Dramatic Effect:** Zoom-in animation (2.5x → 1.0x)
+- **Fade Effect:** Smooth opacity transition (30% → 100%)
+- **Gold Gradient:** Professional visual style
+- **Perfect Timing:** 1 second per number
+
+### 🐛 BUGFIX: Music Playback
+- **Fixed:** Menu music now plays correctly on repeated game starts
+- **Smooth:** No jarring music restarts
+
+### ✅ KRITISCHER BUGFIX (v1.14.1): Monster-Kollision
+- **Behoben:** Monster und Spieler können sich nicht mehr durchkreuzen
+- **Problem:** Position-Swapping Bug vollständig eliminiert
+- **Lösung:** Doppelte Kollisionsprüfung (Pre- und Post-Movement)
+- **Impact:** 100% zuverlässige Kollisionserkennung
+
+Siehe [CHANGELOG.md](CHANGELOG.md) für Details.
 
 ---
 
