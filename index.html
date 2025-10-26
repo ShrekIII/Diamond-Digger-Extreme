@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.15.1</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.15.2</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -2319,7 +2319,8 @@
         // ====== SOUND SYSTEM v1.15.0 ======
         // Lade alle Sound-Effekte
         const sfx = {
-            rock: [],      // 6 rock sounds
+            rock: [],      // 6 rock sounds (fallende Steine - 80%)
+            pick: [],      // 6 pick sounds (Spieler Bewegung - 40%)
             diamond: [],   // 6 diamond sounds
             countdown: null,
             startGame: null,
@@ -2329,12 +2330,20 @@
             suicide: null
         };
         
-        // Lade Rock Sounds (1-6)
+        // Lade Rock Sounds (1-6) für fallende Steine
         for (let i = 1; i <= 6; i++) {
             const audio = new Audio();
             audio.src = `sfx/rock_${i}.mp3`;
-            audio.volume = 0.3;  // 30% Lautstärke
+            audio.volume = 0.8;  // 80% Lautstärke (fallende Steine)
             sfx.rock.push(audio);
+        }
+        
+        // Lade Pick Sounds (1-6) für Spieler-Bewegung (nutze auch rock sounds)
+        for (let i = 1; i <= 6; i++) {
+            const audio = new Audio();
+            audio.src = `sfx/rock_${i}.mp3`;
+            audio.volume = 0.4;  // 40% Lautstärke (Graben/Bewegung)
+            sfx.pick.push(audio);
         }
         
         // Lade Diamond Sounds (1-6)
@@ -2589,6 +2598,7 @@
                             // Prüfe ob alle Diamanten gesammelt wurden
                             if (diamondsCollected >= totalDiamonds) {
                                 exitOpen = true;
+                                playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
                                 flashEffect = true;
                                 flashStartTime = currentTime;
                             }
@@ -2727,7 +2737,7 @@
                     moved = true;
                     player.moving = true;
                     player.lastMoveTime = currentTime;
-                    playRandomSound(sfx.rock);  // ⛏️ Digging/movement sound
+                    playRandomSound(sfx.pick);  // ⛏️ Digging/movement sound (40%)
                     
                     if (!tunnel.has(newPos) && !freeFields.has(newPos)) {
                         tunnel.add(newPos);
@@ -2747,6 +2757,7 @@
                         
                         if (diamondsCollected >= totalDiamonds) {
                             exitOpen = true;
+                            playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
                             flashEffect = true;
                             flashStartTime = currentTime;
                         }
@@ -2938,9 +2949,9 @@
                 return;
             }
             
-            // Update Level Display (zeige "Tutorial X" oder "Level X")
+            // Update Level Display (zeige "Tutorial X/5" oder "Level X")
             if (inTutorialMode) {
-                levelDisplay.textContent = `Tutorial ${currentTutorialLevel}`;
+                levelDisplay.textContent = `${currentTutorialLevel}/5`;
             } else {
                 levelDisplay.textContent = currentLevel;
             }
@@ -3806,7 +3817,7 @@
             resetGameStats();
             currentLevel = 0;
             currentTutorialLevel = 1;  // Start bei Tutorial 1
-            levelDisplay.textContent = 'Tutorial 1';
+            levelDisplay.textContent = '1/5';
             gameOver = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
