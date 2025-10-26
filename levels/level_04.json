@@ -1,10 +1,10 @@
 {
-  "name": "learn about magic walls",
+  "name": "learn to grab without moving",
   "width": 15,
   "height": 15,
   "playerStart": {
-    "x": 7,
-    "y": 7
+    "x": 3,
+    "y": 6
   },
   "exit": {
     "x": 12,
@@ -48,62 +48,11 @@
     [
       "border",
       "border",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
       "earth",
-      "border",
-      "border"
-    ],
-    [
-      "border",
-      "border",
       "empty",
       "empty",
       "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "earth",
-      "border",
-      "border"
-    ],
-    [
-      "border",
-      "border",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "earth",
-      "border",
-      "border"
-    ],
-    [
-      "border",
-      "border",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
-      "empty",
+      "wall",
       "empty",
       "empty",
       "empty",
@@ -117,10 +66,27 @@
       "border",
       "border",
       "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
       "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
       "earth",
-      "earth",
-      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
       "earth",
       "earth",
       "earth",
@@ -134,33 +100,16 @@
       "border",
       "border",
       "earth",
-      "earth",
-      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
       "earth",
       "earth",
       "empty",
       "earth",
       "earth",
       "earth",
-      "earth",
-      "earth",
-      "border",
-      "border"
-    ],
-    [
-      "border",
-      "border",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "magic_wall",
-      "earth",
       "border",
       "border"
     ],
@@ -168,13 +117,13 @@
       "border",
       "border",
       "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
       "earth",
       "earth",
-      "earth",
-      "earth",
-      "earth",
-      "earth",
-      "earth",
+      "empty",
       "earth",
       "earth",
       "earth",
@@ -185,15 +134,66 @@
       "border",
       "border",
       "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
+      "earth",
+      "earth",
+      "empty",
       "earth",
       "earth",
       "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
       "earth",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
       "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
       "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
+      "empty",
       "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
       "earth",
-      "earth",
+      "wall",
+      "wall",
+      "wall",
+      "wall",
+      "magic_wall",
+      "magic_wall",
+      "magic_wall",
+      "magic_wall",
+      "magic_wall",
       "earth",
       "border",
       "border"
@@ -270,12 +270,24 @@
   "objects": {
     "stones": [
       {
-        "x": 2,
+        "x": 3,
         "y": 5
       },
       {
         "x": 3,
-        "y": 5
+        "y": 4
+      },
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 4
       },
       {
         "x": 4,
@@ -286,88 +298,56 @@
         "y": 5
       },
       {
-        "x": 6,
-        "y": 5
+        "x": 5,
+        "y": 6
+      },
+      {
+        "x": 5,
+        "y": 7
+      },
+      {
+        "x": 4,
+        "y": 7
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 4
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 2
       },
       {
         "x": 7,
-        "y": 5
+        "y": 2
       },
       {
         "x": 8,
-        "y": 5
+        "y": 2
       },
       {
         "x": 9,
-        "y": 5
+        "y": 2
       },
       {
         "x": 10,
-        "y": 5
+        "y": 2
       },
       {
         "x": 11,
-        "y": 5
-      },
-      {
-        "x": 11,
-        "y": 4
-      },
-      {
-        "x": 10,
-        "y": 4
-      },
-      {
-        "x": 9,
-        "y": 4
-      },
-      {
-        "x": 8,
-        "y": 4
-      },
-      {
-        "x": 7,
-        "y": 4
-      },
-      {
-        "x": 6,
-        "y": 4
-      },
-      {
-        "x": 5,
-        "y": 4
-      },
-      {
-        "x": 4,
-        "y": 4
-      },
-      {
-        "x": 3,
-        "y": 4
-      },
-      {
-        "x": 2,
-        "y": 4
-      },
-      {
-        "x": 2,
-        "y": 3
-      },
-      {
-        "x": 3,
-        "y": 3
-      },
-      {
-        "x": 4,
-        "y": 3
-      },
-      {
-        "x": 5,
-        "y": 3
-      },
-      {
-        "x": 6,
-        "y": 3
+        "y": 2
       },
       {
         "x": 7,
@@ -388,50 +368,33 @@
       {
         "x": 11,
         "y": 3
-      },
-      {
-        "x": 11,
-        "y": 2
-      },
-      {
-        "x": 10,
-        "y": 2
-      },
-      {
-        "x": 9,
-        "y": 2
-      },
-      {
-        "x": 8,
-        "y": 2
-      },
-      {
-        "x": 7,
-        "y": 2
-      },
-      {
-        "x": 6,
-        "y": 2
-      },
-      {
-        "x": 5,
-        "y": 2
-      },
-      {
-        "x": 4,
-        "y": 2
-      },
-      {
-        "x": 3,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 2
       }
     ],
-    "diamonds": [],
-    "monsters": []
+    "diamonds": [
+      {
+        "x": 4,
+        "y": 6
+      },
+      {
+        "x": 3,
+        "y": 9
+      },
+      {
+        "x": 4,
+        "y": 9
+      },
+      {
+        "x": 5,
+        "y": 9
+      }
+    ],
+    "monsters": [
+      {
+        "type": "tnt",
+        "x": 9,
+        "y": 6
+      }
+    ]
   },
-  "requiredDiamonds": 40
+  "requiredDiamonds": 12
 }
