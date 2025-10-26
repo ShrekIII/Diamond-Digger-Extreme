@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.15.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.15.1</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -566,6 +566,7 @@
         let totalDiamonds = 0;
         let totalDiamondsCollectedAllTime = 0;
         let currentLevel = 0;  // Startet jetzt mit Level 0
+        let currentTutorialLevel = 1;  // Separate Zählung für Tutorials
         let maxLevel = 3; // Level 0-3 verfügbar (4 Level total)
         // Hier werden die geladenen Level gespeichert - Alle werden von GitHub geladen!
         let customLevels = [];  // Leer - Level werden dynamisch geladen
@@ -1158,6 +1159,7 @@
                                 lastFallTime: currentTime,
                                 fallSpeed: 100
                             });
+                            totalDiamonds++;  // Erhöhe Diamant-Zähler für Magic Wall Konversion
                             totalDiamonds++;
                             return; // Fertig mit diesem Stein
                         }
@@ -2916,15 +2918,32 @@
             finalStats.totalLevelsCompleted++;
             finalStats.totalDistanceTraveled += distanceTraveled;
             
-            currentLevel++;
+            // Separate Zählung für Tutorials und Normal Levels
+            if (inTutorialMode) {
+                currentTutorialLevel++;
+                currentLevel = currentTutorialLevel - 1;  // Für Array-Index (0-basiert)
+            } else {
+                currentLevel++;
+            }
+            
+            // Prüfe ob alle Tutorials abgeschlossen (5 Tutorials total)
+            if (inTutorialMode && currentTutorialLevel > 5) {
+                showTutorialCompletionScreen();
+                return;
+            }
             
             // Prüfe ob alle Level abgeschlossen
-            if (usingCustomLevels && currentLevel > maxLevel) {
+            if (!inTutorialMode && usingCustomLevels && currentLevel > maxLevel) {
                 showCompletionScreen();
                 return;
             }
             
-            levelDisplay.textContent = currentLevel;
+            // Update Level Display (zeige "Tutorial X" oder "Level X")
+            if (inTutorialMode) {
+                levelDisplay.textContent = `Tutorial ${currentTutorialLevel}`;
+            } else {
+                levelDisplay.textContent = currentLevel;
+            }
             diamondsCollected = 0;
             exitOpen = false;
             flashEffect = false;
@@ -2941,14 +2960,13 @@
             
             if (usingCustomLevels) {
                 if (inTutorialMode) {
-                    // Tutorial-Modus: Lade Tutorial-Level
-                    const tutorialNum = currentLevel + 1;  // Tutorial 1-5
+                    // Tutorial-Modus: Lade Tutorial-Level (nutze currentTutorialLevel)
                     if (tutorialLevels[currentLevel]) {
-                        console.log(`✅ Tutorial ${tutorialNum} bereits im Cache`);
+                        console.log(`✅ Tutorial ${currentTutorialLevel} bereits im Cache`);
                         loadLevel(currentLevel);
                     } else {
-                        console.log(`📥 Lade Tutorial ${tutorialNum} von GitHub...`);
-                        loadTutorialFromGitHub(tutorialNum);
+                        console.log(`📥 Lade Tutorial ${currentTutorialLevel} von GitHub...`);
+                        loadTutorialFromGitHub(currentTutorialLevel);
                     }
                 } else {
                     // Normal-Modus: Lade normale Level
@@ -3032,6 +3050,22 @@
             
             ctx.drawImage(backgroundCanvas, camera.x, camera.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
             
+            drawTunnel();
+            drawWalls();
+            
+            drawExit(); // Zeichne die Tür
+            walls.forEach(wall => drawWall(wall)); // Zeichne die Mauern
+            diamonds.forEach(diamond => drawDiamond(diamond));
+            obstacles.forEach(obstacle => drawObstacle(obstacle));
+            monsters.filter(m => !m.dead).forEach(monster => drawMonster(monster));
+            
+            movePlayer(currentTime);
+            updateFallingStones(currentTime);
+            updateFallingDiamonds(currentTime);
+            updateMonsters();
+            
+            drawPlayer();
+
             // Blink-Effekt während Wartezeit (2 Sekunden am Level-Start)
             if (!playerCanMove && !gameOver) {
                 const elapsed = currentTime - levelStartTime;
@@ -3095,21 +3129,6 @@
                 }
             }
             
-            drawTunnel();
-            drawWalls();
-            
-            drawExit(); // Zeichne die Tür
-            walls.forEach(wall => drawWall(wall)); // Zeichne die Mauern
-            diamonds.forEach(diamond => drawDiamond(diamond));
-            obstacles.forEach(obstacle => drawObstacle(obstacle));
-            monsters.filter(m => !m.dead).forEach(monster => drawMonster(monster));
-            
-            movePlayer(currentTime);
-            updateFallingStones(currentTime);
-            updateFallingDiamonds(currentTime);
-            updateMonsters();
-            
-            drawPlayer();
             
             // Timer Update
             if (!gameOver && timerRunning) {
@@ -3459,6 +3478,77 @@
             distanceTraveled = 0;
         }
         
+        function showTutorialCompletionScreen() {
+            gameCompleted = true;
+            gameStarted = false;
+            inTutorialMode = false;  // Exit Tutorial Mode
+            
+            // Erstelle Modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.5s;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+                padding: 60px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 600px;
+                border: 4px solid #FFD700;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            `;
+            
+            content.innerHTML = `
+                <h1 style="color: #FFD700; font-size: 48px; margin: 0 0 30px 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">
+                    🎓 TUTORIAL COMPLETE! 🎓
+                </h1>
+                <p style="color: #FFFFFF; font-size: 24px; margin: 30px 0; line-height: 1.6;">
+                    You made it through the tutorial -<br>
+                    now try to get a highscore!
+                </p>
+                <button id="tutorialOkBtn" style="
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    color: #000;
+                    border: none;
+                    padding: 20px 60px;
+                    font-size: 24px;
+                    font-weight: bold;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin-top: 30px;
+                    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(255, 215, 0, 0.6)';"
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 215, 0, 0.4)';">
+                    OK
+                </button>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            // OK Button Handler
+            document.getElementById('tutorialOkBtn').addEventListener('click', () => {
+                modal.remove();
+                showMenu();
+                resetGameStats();
+                currentTutorialLevel = 1;  // Reset für nächstes Mal
+                currentLevel = 0;
+            });
+        }
+        
         function showCompletionScreen() {
             gameCompleted = true;
             gameStarted = false;
@@ -3715,7 +3805,8 @@
             hideMenu();
             resetGameStats();
             currentLevel = 0;
-            levelDisplay.textContent = '1';  // Tutorial startet bei 1 (visuell)
+            currentTutorialLevel = 1;  // Start bei Tutorial 1
+            levelDisplay.textContent = 'Tutorial 1';
             gameOver = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
