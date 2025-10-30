@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.16.1</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.17.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -565,8 +565,10 @@
         let diamondsCollected = 0;
         let totalDiamonds = 0;
         let totalDiamondsCollectedAllTime = 0;
-        let currentLevel = 0;  // Startet jetzt mit Level 0
-        let currentTutorialLevel = 1;  // Separate Zählung für Tutorials
+        let currentLevel = 0;  // Normal Levels (0-basiert)
+        let currentTutorialLevel = 1;  // Tutorial Levels (1-basiert)
+        let maxTutorialLevels = 4;  // Wird dynamisch gesetzt
+        let maxNormalLevels = 5;  // Wird dynamisch gesetzt (level_00 bis level_04)
         let maxLevel = 3; // Level 0-3 verfügbar (4 Level total)
         // Hier werden die geladenen Level gespeichert - Alle werden von GitHub geladen!
         let customLevels = [];  // Leer - Level werden dynamisch geladen
@@ -2920,19 +2922,9 @@
                 
                 if (clickX >= button1X && clickX <= button1X + button1Width &&
                     clickY >= button1Y && clickY <= button1Y + button1Height) {
-                    // Level wiederholen - OHNE Highscore
-                    console.log(`🔄 Level wiederholen - Level ${currentLevel}, Tutorial: ${inTutorialMode}`);
-                    gameOver = false;
-                    highscoreChecked = true;  // Verhindert Highscore-Prüfung!
-                    
-                    // Lade aktuelles Level neu (ohne currentLevel zu ändern)
-                    if (inTutorialMode) {
-                        // Tutorial: Lade Tutorial neu mit korrekter Nummer (1-basiert)
-                        loadTutorialFromGitHub(currentLevel);
-                    } else {
-                        // Normal/Custom Level: loadLevelByNumber erwartet 1-basiert
-                        loadLevelByNumber(currentLevel);
-                    }
+                    // RETRY LEVEL: Wiederholen des aktuellen Levels
+                    console.log(`🔄 Retry Level - ${inTutorialMode ? 'Tutorial' : 'Level'} ${inTutorialMode ? currentTutorialLevel : currentLevel}`);
+                    retryCurrentLevel();
                     return;
                 }
                 
@@ -2945,16 +2937,75 @@
                 if (clickX >= button2X && clickX <= button2X + button2Width &&
                     clickY >= button2Y && clickY <= button2Y + button2Height) {
                     // Zurück zum Hauptmenü
+                    console.log('🏠 Zurück zum Hauptmenü');
                     gameOver = false;
-                    highscoreChecked = false;  // Reset für nächstes Spiel
-                    currentLevel = 1;
-                    totalDiamondsCollectedAllTime = 0;
-                    showMenu();  // Zeige Menü an!
+                    gameCompleted = false;
+                    gameStarted = false;
+                    highscoreChecked = false;
+                    showMenu();
                 }
             }
         });
         
+        // RETRY CURRENT LEVEL: Wiederholen ohne Weiterspielen
+        function retryCurrentLevel() {
+            console.log('🔄 RETRY CURRENT LEVEL');
+            
+            // Reset Game State
+            gameOver = false;
+            gameCompleted = false;  // Wichtig: Level als nicht abgeschlossen markieren
+            highscoreChecked = true;  // Keine Highscore-Prüfung beim Retry
+            
+            // Reset Stats (NUR für dieses Level)
+            diamondsCollected = 0;
+            distanceTraveled = 0;
+            exitOpen = false;
+            flashEffect = false;
+            tunnel = new Set();
+            
+            // Reset Timer
+            timeRemaining = getTimeForLevel(currentLevel);
+            timerDisplay.textContent = timeRemaining;
+            lastTimerUpdate = performance.now();
+            timerRunning = true;
+            timerDisplay.style.color = '#FFFFFF';
+            timerDisplay.style.fontWeight = 'normal';
+            
+            // Lade aktuelles Level NEU
+            if (inTutorialMode) {
+                // Tutorial: currentTutorialLevel (1-basiert)
+                console.log(`📚 Retry Tutorial ${currentTutorialLevel}`);
+                if (tutorialLevels[currentLevel]) {
+                    // Aus Cache laden
+                    const levelData = tutorialLevels[currentLevel];
+                    showTutorialMissionScreen(levelData, currentTutorialLevel);
+                } else {
+                    // Von GitHub laden
+                    loadTutorialFromGitHub(currentTutorialLevel);
+                }
+            } else {
+                // Normal Level: currentLevel (0-basiert)
+                console.log(`🎮 Retry Level ${currentLevel}`);
+                if (customLevels[currentLevel]) {
+                    // Aus Cache laden
+                    loadLevel(currentLevel);
+                } else {
+                    // Von GitHub laden
+                    loadLevelFromGitHub(currentLevel);
+                }
+            }
+        }
+        
         function nextLevel() {
+            // RETRY MODE: Wenn Retry-Level abgeschlossen -> Hauptmenü
+            if (highscoreChecked) {
+                console.log('✅ Retry-Level abgeschlossen → Hauptmenü');
+                gameCompleted = true;
+                gameStarted = false;
+                showMenu();
+                return;
+            }
+            
             // Update Statistics
             finalStats.totalDiamondsCollected += diamondsCollected;
             finalStats.totalLevelsCompleted++;
@@ -2968,23 +3019,25 @@
                 currentLevel++;
             }
             
-            // Prüfe ob alle Tutorials abgeschlossen (4 Tutorials total)
-            if (inTutorialMode && currentTutorialLevel > 4) {
+            // Prüfe ob alle Tutorials abgeschlossen
+            if (inTutorialMode && currentTutorialLevel > maxTutorialLevels) {
+                console.log(`✅ Alle ${maxTutorialLevels} Tutorials abgeschlossen!`);
                 showTutorialCompletionScreen();
                 return;
             }
             
-            // Prüfe ob alle Level abgeschlossen
-            if (!inTutorialMode && usingCustomLevels && currentLevel > maxLevel) {
+            // Prüfe ob alle Normal-Level abgeschlossen
+            if (!inTutorialMode && currentLevel >= maxNormalLevels) {
+                console.log(`✅ Alle ${maxNormalLevels} Level abgeschlossen!`);
                 showCompletionScreen();
                 return;
             }
             
-            // Update Level Display (zeige "Tutorial X/4" oder "Level X")
+            // Update Level Display
             if (inTutorialMode) {
-                levelDisplay.textContent = `${currentTutorialLevel}/4`;
+                levelDisplay.textContent = `${currentTutorialLevel}/${maxTutorialLevels}`;
             } else {
-                levelDisplay.textContent = currentLevel;
+                levelDisplay.textContent = `${currentLevel + 1}/${maxNormalLevels}`;  // +1 für Display (Level 1-5 statt 0-4)
             }
             diamondsCollected = 0;
             exitOpen = false;
@@ -3830,13 +3883,22 @@
             console.log('🎮 START GAME');
             hideMenu();
             resetGameStats();
-            currentLevel = 0;  // Startet mit Level 0!
-            currentTutorialLevel = 1;  // Reset Tutorial Counter
+            
+            // RESET: Level Progress
+            currentLevel = 0;  // Start bei Level 0
+            currentTutorialLevel = 1;  // Reset Tutorial für nächstes Mal
+            
+            // RESET: Game State
             gameOver = false;
+            gameCompleted = false;
             highscoreChecked = false;
-            inTutorialMode = false;  // Kein Tutorial - WICHTIG!
+            inTutorialMode = false;  // Kein Tutorial!
+            
+            // RESET: Level Cache
             tutorialLevels = [];  // Clear Tutorial Cache
-            gameStarted = false;  // Wird in loadLevelFromGitHub gesetzt
+            
+            levelDisplay.textContent = `1/${maxNormalLevels}`;
+            gameStarted = false;
             
             // Lade Level 0 von GitHub
             console.log('📥 Lade Level 0 von GitHub...');
@@ -3850,14 +3912,23 @@
             console.log('📚 START TUTORIAL');
             hideMenu();
             resetGameStats();
+            
+            // RESET: Tutorial Progress
             currentLevel = 0;
             currentTutorialLevel = 1;  // Start bei Tutorial 1
-            levelDisplay.textContent = '1/4';
+            
+            // RESET: Game State
             gameOver = false;
+            gameCompleted = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
+            
+            // RESET: Level Cache
             tutorialLevels = [];  // Leere Tutorial-Level
-            gameStarted = false;  // Wird in loadTutorialFromGitHub gesetzt
+            customLevels = [];  // Clear normal level cache
+            
+            levelDisplay.textContent = `1/${maxTutorialLevels}`;
+            gameStarted = false;
             
             // Lade Tutorial 01 von GitHub
             console.log('📥 Lade Tutorial 01 von GitHub...');
