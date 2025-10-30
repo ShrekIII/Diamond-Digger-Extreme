@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.17.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.18.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -716,30 +716,39 @@
                                 const py = y * GRID_SIZE - camera.y;
                                 
                                 if (px + GRID_SIZE >= 0 && px < canvas.width && py + GRID_SIZE >= 0 && py < canvas.height) {
-                                    // Dunkelrot für unzerstörbare Wand
-                                    ctx.fillStyle = '#8B0000';
-                                    ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
-                                    // Hellerer Rand
-                                    ctx.strokeStyle = '#CD5C5C';
-                                    ctx.lineWidth = 2;
-                                    ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+                                    // Zeichne Border Image
+                                    if (borderImg && borderImg.complete) {
+                                        ctx.drawImage(borderImg, px, py, GRID_SIZE, GRID_SIZE);
+                                    } else {
+                                        // Fallback: dunkelrot
+                                        ctx.fillStyle = '#8B0000';
+                                        ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
+                                    }
                                 }
                             } else if (tile === 'magic_wall') {
                                 const px = x * GRID_SIZE - camera.x;
                                 const py = y * GRID_SIZE - camera.y;
                                 
                                 if (px + GRID_SIZE >= 0 && px < canvas.width && py + GRID_SIZE >= 0 && py < canvas.height) {
-                                    // Magische Wand (lila/magenta mit Glanz)
-                                    ctx.fillStyle = '#8B008B';
-                                    ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
-                                    // Magischer Glanz
-                                    ctx.strokeStyle = '#FF00FF';
-                                    ctx.lineWidth = 2;
-                                    ctx.strokeRect(px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2);
-                                    // Innerer Glanz
-                                    ctx.strokeStyle = '#FF69B4';
-                                    ctx.lineWidth = 1;
-                                    ctx.strokeRect(px + 3, py + 3, GRID_SIZE - 6, GRID_SIZE - 6);
+                                    // Initialisiere random Start Frame für diese Position
+                                    const key = `${x},${y}`;
+                                    if (!magicWallStartFrames.has(key)) {
+                                        magicWallStartFrames.set(key, Math.floor(Math.random() * 4));
+                                    }
+                                    
+                                    // Berechne aktuelles Frame (Start Frame + Animation Frame) % 4
+                                    const startFrame = magicWallStartFrames.get(key);
+                                    const currentFrame = (startFrame + magicWallAnimationFrame) % 4;
+                                    
+                                    // Zeichne animiertes Magic Wall Tile
+                                    const magicImg = magicWallImages[currentFrame];
+                                    if (magicImg && magicImg.complete) {
+                                        ctx.drawImage(magicImg, px, py, GRID_SIZE, GRID_SIZE);
+                                    } else {
+                                        // Fallback: lila Rechteck
+                                        ctx.fillStyle = '#8B008B';
+                                        ctx.fillRect(px, py, GRID_SIZE, GRID_SIZE);
+                                    }
                                 }
                             }
                         }
@@ -1031,46 +1040,14 @@
             const y = wall.gridY * GRID_SIZE - camera.y;
             
             if (x + GRID_SIZE >= 0 && x < canvas.width && y + GRID_SIZE >= 0 && y < canvas.height) {
-                // Wähle eine zufällige Farbe basierend auf Position (bleibt konstant)
-                const colorIndex = (wall.gridX * 7 + wall.gridY * 13) % wallColors.length;
-                const color = wallColors[colorIndex];
-                
-                // Hauptblock
-                ctx.fillStyle = color;
-                ctx.fillRect(x, y, GRID_SIZE, GRID_SIZE);
-                
-                // Steinstruktur - Fugen zwischen Steinen
-                ctx.strokeStyle = '#2a2a2a';
-                ctx.lineWidth = 2;
-                
-                // Horizontale Fuge
-                ctx.beginPath();
-                ctx.moveTo(x, y + GRID_SIZE / 2);
-                ctx.lineTo(x + GRID_SIZE, y + GRID_SIZE / 2);
-                ctx.stroke();
-                
-                // Vertikale Fuge (versetzt)
-                if ((wall.gridX + wall.gridY) % 2 === 0) {
-                    ctx.beginPath();
-                    ctx.moveTo(x + GRID_SIZE / 2, y);
-                    ctx.lineTo(x + GRID_SIZE / 2, y + GRID_SIZE / 2);
-                    ctx.stroke();
+                // Zeichne Wall Image
+                if (wallImg && wallImg.complete) {
+                    ctx.drawImage(wallImg, x, y, GRID_SIZE, GRID_SIZE);
                 } else {
-                    ctx.beginPath();
-                    ctx.moveTo(x + GRID_SIZE / 2, y + GRID_SIZE / 2);
-                    ctx.lineTo(x + GRID_SIZE / 2, y + GRID_SIZE);
-                    ctx.stroke();
+                    // Fallback: graue Wand
+                    ctx.fillStyle = '#666666';
+                    ctx.fillRect(x, y, GRID_SIZE, GRID_SIZE);
                 }
-                
-                // Highlights für 3D-Effekt
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-                ctx.fillRect(x + 2, y + 2, GRID_SIZE - 4, 3);
-                ctx.fillRect(x + 2, y + 2, 3, GRID_SIZE - 4);
-                
-                // Schatten
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                ctx.fillRect(x + GRID_SIZE - 5, y + 5, 3, GRID_SIZE - 5);
-                ctx.fillRect(x + 5, y + GRID_SIZE - 5, GRID_SIZE - 5, 3);
                 
                 // Health-Indikator bei Beschädigung
                 if (wall.health < 3) {
@@ -2303,17 +2280,46 @@
             earthImages.push(img);
         }
         
+        // Magic Wall Animation (4 Frames)
+        const magicWallImages = [];
+        for (let i = 1; i <= 4; i++) {
+            const img = new Image();
+            img.src = `img/tiles/magic_wall_${i}.png`;
+            magicWallImages.push(img);
+        }
+        
+        // Border und Wall Images
+        const borderImg = new Image();
+        borderImg.src = 'img/tiles/border.png';
+        
+        const wallImg = new Image();
+        wallImg.src = 'img/tiles/wall.png';
+        
+        // Magic Wall Animation State
+        let magicWallAnimationFrame = 0;
+        let lastMagicWallUpdate = 0;
+        const magicWallAnimationSpeed = 200;  // ms pro Frame
+        
+        // Random Start Frame für jede Magic Wall Position
+        const magicWallStartFrames = new Map();  // key: "x,y", value: startFrame (0-3)
+        
         // Earth tile frequency distribution
         function selectEarthTexture(x, y, levelSeed) {
             const hash = (x * 73856093) ^ (y * 19349663) ^ (levelSeed * 83492791);
             const rand = Math.abs(hash % 1000) / 1000;
-            if (rand < 0.4) return 9;  // 40% Image 09
-            if (rand >= 0.90) {  // 10% Images 15-18 (erhöht von 5%)
-                const rareIndex = 15 + Math.floor((rand - 0.95) * 80);
-                return Math.min(18, Math.floor(15 + (rand - 0.90) * 40));  // 10% fossils
+            
+            // 20% Chance für rare tiles (15-18)
+            if (rand >= 0.80) {
+                const rareIndex = 15 + Math.floor((rand - 0.80) * 20);  // 20% für 15-18
+                return Math.min(18, rareIndex);
             }
+            
+            // 40% Image 09
+            if (rand < 0.4) return 9;
+            
+            // 40% normale Textures (1-8, 10-14)
             const normalTextures = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14];
-            return normalTextures[Math.floor((rand - 0.4) / 0.55 * normalTextures.length)];
+            return normalTextures[Math.floor((rand - 0.4) / 0.4 * normalTextures.length)];
         }
         
 
@@ -3143,6 +3149,12 @@
                 const deltaTime = currentTime - lastFrameTime;
                 finalStats.totalTimePlayed += deltaTime;
                 lastFrameTime = currentTime;
+            }
+            
+            // Update Magic Wall Animation
+            if (currentTime - lastMagicWallUpdate >= magicWallAnimationSpeed) {
+                magicWallAnimationFrame = (magicWallAnimationFrame + 1) % 4;
+                lastMagicWallUpdate = currentTime;
             }
             
             ctx.drawImage(backgroundCanvas, camera.x, camera.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
