@@ -106,24 +106,7 @@
       "wall",
       "earth",
       "earth",
-      "empty",
       "earth",
-      "earth",
-      "earth",
-      "border",
-      "border"
-    ],
-    [
-      "border",
-      "border",
-      "earth",
-      "empty",
-      "empty",
-      "empty",
-      "wall",
-      "earth",
-      "earth",
-      "empty",
       "earth",
       "earth",
       "earth",
@@ -140,8 +123,25 @@
       "wall",
       "earth",
       "earth",
-      "empty",
       "earth",
+      "earth",
+      "earth",
+      "earth",
+      "border",
+      "border"
+    ],
+    [
+      "border",
+      "border",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
+      "wall",
+      "earth",
+      "empty",
+      "empty",
+      "empty",
       "earth",
       "earth",
       "border",
@@ -391,8 +391,8 @@
     "monsters": [
       {
         "type": "tnt",
-        "x": 9,
-        "y": 6
+        "x": 10,
+        "y": 7
       }
     ]
   },
