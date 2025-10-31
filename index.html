@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title" style="font-family: 'Georgia', serif; font-weight: bold; text-shadow: 3px 3px 0px #8B4513, 6px 6px 0px #654321, 1px 1px 10px rgba(218, 165, 32, 0.8); color: #FFD700; font-size: 64px; letter-spacing: 3px; transform: rotate(-2deg); margin-bottom: 5px;">DIAMOND DIGGER</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.19.2</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.19.3</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -566,6 +566,7 @@
         let totalDistance = 0;
         let diamondsCollected = 0;
         let totalDiamonds = 0;
+        let requiredDiamonds = 0;  // Anzahl benötigter Diamanten (aus Level JSON)
         let totalDiamondsCollectedAllTime = 0;
         let currentLevel = 0;  // Normal Levels (0-basiert)
         let currentTutorialLevel = 1;  // Tutorial Levels (1-basiert)
@@ -1720,8 +1721,7 @@
                 
                 // Füge alle neuen Diamanten zum Array hinzu
                 diamonds.push(...newDiamonds);
-                totalDiamonds += newDiamonds.length;  // Update total diamonds count
-                totalDiamondsNeededDisplay.textContent = totalDiamonds;
+                totalDiamonds += newDiamonds.length;  // Update total diamonds count (aber NICHT required!)
             }
         }
         
@@ -2631,7 +2631,7 @@
                             lastMoveTime = currentTime;
                             
                             // Prüfe ob alle Diamanten gesammelt wurden
-                            if (diamondsCollected >= totalDiamonds) {
+                            if (diamondsCollected >= requiredDiamonds) {
                                 if (!exitOpen) {  // Nur wenn vorher geschlossen
                                     playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
                                     flashEffect = true;
@@ -2791,7 +2791,7 @@
                         diamondsDisplay.textContent = diamondsCollected;
                         totalCollectedDisplay.textContent = totalDiamondsCollectedAllTime;
                         
-                        if (diamondsCollected >= totalDiamonds) {
+                        if (diamondsCollected >= requiredDiamonds) {
                             if (!exitOpen) {  // Nur wenn vorher geschlossen
                                 playSound(sfx.doorOpen);  // 🚪 Tür öffnet sich!
                                 flashEffect = true;
@@ -3698,8 +3698,12 @@
             exitOpen = false;
             
             // Setze Diamanten-Ziel
-            totalDiamonds = levelData.requiredDiamonds || levelData.objects.diamonds.length;
+            requiredDiamonds = levelData.requiredDiamonds || levelData.objects.diamonds.length;
+            totalDiamonds = levelData.objects.diamonds.length;  // Anzahl Diamanten im Level
             diamondsCollected = 0;
+            
+            // Update Display mit REQUIRED Diamanten
+            totalDiamondsNeededDisplay.textContent = requiredDiamonds;
             
             // Reset Game State
             gameOver = false;
