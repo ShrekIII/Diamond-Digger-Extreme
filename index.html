@@ -412,8 +412,8 @@
         <div class="menu-overlay"></div>
         <div class="menu-content">
             <div class="menu-left">
-                <h1 class="game-title">💎 DIAMOND DIGGER 💎</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.18.0</p>
+                <h1 class="game-title" style="font-family: 'Georgia', serif; font-weight: bold; text-shadow: 3px 3px 0px #8B4513, 6px 6px 0px #654321, 1px 1px 10px rgba(218, 165, 32, 0.8); color: #FFD700; font-size: 64px; letter-spacing: 3px; transform: rotate(-2deg); margin-bottom: 5px;">DIAMOND DIGGER</h1>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.19.0</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -463,6 +463,7 @@
     <div class="status-bar">
         <div class="stats">
             <div class="stat-item">Level: <span id="level">1</span></div>
+            <div class="stat-item">❤️ Lives: <span id="lives">3</span></div>
             <div class="stat-item">⏱️ Time: <span id="timer">60</span>s</div>
             <div class="stat-item">💎 <span id="diamonds">0</span>/<span id="totalDiamondsNeeded">0</span></div>
             <div class="stat-item">⭐ Diamonds collected: <span id="totalCollected">0</span></div>
@@ -516,6 +517,7 @@
         const totalCollectedDisplay = document.getElementById('totalCollected');
         const levelDisplay = document.getElementById('level');
         const timerDisplay = document.getElementById('timer');
+        const livesDisplay = document.getElementById('lives');
         
         // Timer Variablen
         let timeRemaining = 60; // Sekunden
@@ -568,7 +570,7 @@
         let currentLevel = 0;  // Normal Levels (0-basiert)
         let currentTutorialLevel = 1;  // Tutorial Levels (1-basiert)
         let maxTutorialLevels = 4;  // Wird dynamisch gesetzt
-        let maxNormalLevels = 5;  // Wird dynamisch gesetzt (level_00 bis level_04)
+        let maxNormalLevels = 6;  // level_00 bis level_05 (6 Levels total)
         let maxLevel = 3; // Level 0-3 verfügbar (4 Level total)
         // Hier werden die geladenen Level gespeichert - Alle werden von GitHub geladen!
         let customLevels = [];  // Leer - Level werden dynamisch geladen
@@ -614,6 +616,12 @@
         let gameOver = false;
         let gameOverReason = '';
         let highscoreChecked = false;  // Track ob Highscore bereits geprüft wurde
+        
+        // LIVES SYSTEM
+        let playerLives = 3;  // Spieler startet mit 3 Leben
+        let maxLives = 3;
+        let showDeathScreen = false;  // Zeigt "You died!" Screen
+        
         let backgroundCanvas = null;
         const wallColors = ['#4a4a4a', '#5a5a5a', '#6a6a6a', '#555555', '#505050'];
         
@@ -2824,6 +2832,84 @@
             }
         }
         
+        
+        // DEATH SYSTEM
+        function playerDied(reason) {
+            gameOverReason = reason;
+            playerLives--;
+            livesDisplay.textContent = playerLives;
+            
+            if (playerLives <= 0) {
+                // Alle Leben aufgebraucht → Game Over
+                gameOver = true;
+                showDeathScreen = false;
+            } else {
+                // Noch Leben übrig → Death Screen
+                showDeathScreen = true;
+                gameOver = false;  // Noch nicht Game Over!
+            }
+        }
+        
+        function drawDeathScreen() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // "You died!" Titel
+            ctx.fillStyle = '#FF0000';
+            ctx.font = 'bold 72px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 4;
+            ctx.strokeText('YOU DIED!', canvas.width / 2, canvas.height / 2 - 150);
+            ctx.fillText('YOU DIED!', canvas.width / 2, canvas.height / 2 - 150);
+            
+            // Grund für Tod
+            ctx.fillStyle = '#FFA500';
+            ctx.font = 'bold 32px Arial';
+            ctx.strokeText(gameOverReason, canvas.width / 2, canvas.height / 2 - 80);
+            ctx.fillText(gameOverReason, canvas.width / 2, canvas.height / 2 - 80);
+            
+            // Verbleibende Leben
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 36px Arial';
+            const livesText = playerLives === 1 ? '1 Life Remaining' : `${playerLives} Lives Remaining`;
+            ctx.strokeText(livesText, canvas.width / 2, canvas.height / 2 - 10);
+            ctx.fillText(livesText, canvas.width / 2, canvas.height / 2 - 10);
+            
+            // Button 1: Continue (links)
+            const button1Width = 220;
+            const button1Height = 60;
+            const button1X = canvas.width / 2 - 230;
+            const button1Y = canvas.height / 2 + 80;
+            
+            ctx.fillStyle = '#2196F3';
+            ctx.fillRect(button1X, button1Y, button1Width, button1Height);
+            ctx.strokeStyle = '#0D47A1';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(button1X, button1Y, button1Width, button1Height);
+            
+            ctx.fillStyle = '#FFF';
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('▶ CONTINUE', button1X + button1Width / 2, button1Y + button1Height / 2);
+            
+            // Button 2: Main Menu (rechts)
+            const button2Width = 200;
+            const button2Height = 60;
+            const button2X = canvas.width / 2 + 30;
+            const button2Y = canvas.height / 2 + 80;
+            
+            ctx.fillStyle = '#4CAF50';
+            ctx.fillRect(button2X, button2Y, button2Width, button2Height);
+            ctx.strokeStyle = '#2E7D32';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(button2X, button2Y, button2Width, button2Height);
+            
+            ctx.fillStyle = '#FFF';
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('MAIN MENU', button2X + button2Width / 2, button2Y + button2Height / 2);
+        }
+        
         function drawGameOver() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2895,8 +2981,7 @@
         document.addEventListener('keydown', (e) => {
             // ESCAPE drücken → Spieler stirbt
             if (e.key === 'Escape' && gameStarted && !gameOver && !gameCompleted) {
-                gameOver = true;
-                gameOverReason = '🚪 Suicide';
+                playerDied('🚪 Suicide');
                 playSound(sfx.suicide);  // 💀 Selbstmord-Sound
                 console.log('⚠️ Spieler hat ESC gedrückt - Game Over');
             }
@@ -2915,6 +3000,50 @@
         });
         
         canvas.addEventListener('click', (e) => {
+            // DEATH SCREEN (noch Leben übrig)
+            if (showDeathScreen) {
+                const rect = canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+                
+                // Button 1: Continue (links)
+                const button1Width = 220;
+                const button1Height = 60;
+                const button1X = canvas.width / 2 - 230;
+                const button1Y = canvas.height / 2 + 80;
+                
+                if (clickX >= button1X && clickX <= button1X + button1Width &&
+                    clickY >= button1Y && clickY <= button1Y + button1Height) {
+                    // Continue - Lade aktuelles Level neu
+                    console.log('▶ Continue - Leben übrig:', playerLives);
+                    showDeathScreen = false;
+                    retryCurrentLevel();
+                    return;
+                }
+                
+                // Button 2: Main Menu (rechts)
+                const button2Width = 200;
+                const button2Height = 60;
+                const button2X = canvas.width / 2 + 30;
+                const button2Y = canvas.height / 2 + 80;
+                
+                if (clickX >= button2X && clickX <= button2X + button2Width &&
+                    clickY >= button2Y && clickY <= button2Y + button2Height) {
+                    // Zurück zum Hauptmenü
+                    console.log('🏠 Zurück zum Hauptmenü (von Death Screen)');
+                    showDeathScreen = false;
+                    gameOver = false;
+                    gameCompleted = false;
+                    gameStarted = false;
+                    highscoreChecked = false;
+                    playerLives = maxLives;  // Reset Lives
+                    livesDisplay.textContent = playerLives;
+                    showMenu();
+                    return;
+                }
+            }
+            
+            // GAME OVER SCREEN (keine Leben mehr)
             if (gameOver) {
                 const rect = canvas.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
@@ -3274,6 +3403,13 @@
                 } else {
                     flashEffect = false;
                 }
+            }
+            
+            // Death Screen (noch Leben übrig)
+            if (showDeathScreen) {
+                drawDeathScreen();
+                requestAnimationFrame(gameLoop);
+                return;
             }
             
             if (gameOver) {
@@ -3905,6 +4041,11 @@
             gameCompleted = false;
             highscoreChecked = false;
             inTutorialMode = false;  // Kein Tutorial!
+            showDeathScreen = false;  // Kein Death Screen
+            
+            // RESET: Lives
+            playerLives = maxLives;
+            livesDisplay.textContent = playerLives;
             
             // RESET: Level Cache
             tutorialLevels = [];  // Clear Tutorial Cache
@@ -3934,6 +4075,11 @@
             gameCompleted = false;
             highscoreChecked = false;
             inTutorialMode = true;  // Tutorial-Modus aktiv!
+            showDeathScreen = false;  // Kein Death Screen
+            
+            // RESET: Lives
+            playerLives = maxLives;
+            livesDisplay.textContent = playerLives;
             
             // RESET: Level Cache
             tutorialLevels = [];  // Leere Tutorial-Level
