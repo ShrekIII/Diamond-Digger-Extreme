@@ -413,7 +413,7 @@
         <div class="menu-content">
             <div class="menu-left">
                 <h1 class="game-title" style="font-family: 'Georgia', serif; font-weight: bold; text-shadow: 3px 3px 0px #8B4513, 6px 6px 0px #654321, 1px 1px 10px rgba(218, 165, 32, 0.8); color: #FFD700; font-size: 64px; letter-spacing: 3px; transform: rotate(-2deg); margin-bottom: 5px;">DIAMOND DIGGER</h1>
-                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.19.0</p>
+                <p style="text-align: center; color: #FFD700; font-size: 18px; margin-top: -15px; margin-bottom: 20px; font-weight: bold;">v1.19.1</p>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="startGame()">▶ Start Game</button>
                     <button class="menu-btn" onclick="startTutorial()">📚 Start Tutorial</button>
@@ -1163,8 +1163,7 @@
                         // Stein fällt weiter
                         // Prüfe Kollision mit Spieler im Zielfeld
                         if (obstacle.gridX === playerGridX && belowGridY === playerGridY) {
-                            gameOver = true;
-                            gameOverReason = '🪨 Hit by rock!';
+                            playerDied('🪨 Hit by rock!');
                         }
                         
                         // Bewege Stein ein Feld nach unten
@@ -1404,8 +1403,7 @@
                         // Diamant fällt weiter
                         // Prüfe Kollision mit Spieler im Zielfeld
                         if (diamond.gridX === playerGridX && belowGridY === playerGridY) {
-                            gameOver = true;
-                            gameOverReason = '💎 Hit by diamond!';
+                            playerDied('💎 Hit by diamond!');
                         }
                         
                         // Bewege Diamant ein Feld nach unten
@@ -1565,8 +1563,7 @@
             
             if (playerDist === 1) {
                 // Spieler ist 1 Feld entfernt - stirbt durch Explosion
-                gameOver = true;
-                gameOverReason = '💥 Killed by corpse explosion!';
+                playerDied('💥 Killed by corpse explosion!');
             }
             
             if (monster.type === 'tnt') {
@@ -1634,8 +1631,7 @@
                                         // Prüfe ob Spieler bei diesem Monster 1 Feld entfernt ist
                                         const playerDist2 = Math.max(Math.abs(playerGridX - otherMonster.gridX), Math.abs(playerGridY - otherMonster.gridY));
                                         if (playerDist2 === 1) {
-                                            gameOver = true;
-                                            gameOverReason = '💥 Killed by chain reaction!';
+                                            playerDied('💥 Killed by chain reaction!');
                                         }
                                         
                                         // Rekursive Kettenreaktion
@@ -1650,8 +1646,13 @@
                 // Diamant-Monster: Erstellt Diamanten
                 const newDiamonds = [];
                 
-                // Das tötende Objekt wird zu einem Diamanten (nur bei Stein, nicht bei Diamant)
-                if (killingObjectType === 'stone') {
+                // Das Monster-Feld selbst wird IMMER zu einem Diamanten
+                // (außer wenn bereits ein Diamant dort liegt)
+                const hasExistingDiamond = diamonds.some(d => 
+                    d.gridX === monster.gridX && d.gridY === monster.gridY && !d.collected
+                );
+                
+                if (!hasExistingDiamond) {
                     newDiamonds.push({
                         gridX: monster.gridX,
                         gridY: monster.gridY,
@@ -1663,28 +1664,27 @@
                         fallSpeed: 100
                     });
                 }
-                // Bei killingObjectType === 'diamond' bleibt der Diamant einfach liegen
                 
-                // Kettenreaktion: Wandle alle umgebenden leeren und Erdfelder in Diamanten um
+                // Kettenreaktion: Wandle alle umgebenden Felder (8 Felder) in Diamanten um
                 for (let dx = -1; dx <= 1; dx++) {
                     for (let dy = -1; dy <= 1; dy++) {
-                        if (dx === 0 && dy === 0) continue; // Monster-Feld selbst
+                        if (dx === 0 && dy === 0) continue; // Monster-Feld bereits behandelt
                         
                         const nx = monster.gridX + dx;
                         const ny = monster.gridY + dy;
                         const key = `${nx},${ny}`;
                         
-                        const isEmptyField = tunnel.has(key) || freeFields.has(key);
-                        const isEarthField = !tunnel.has(key) && !freeFields.has(key) && 
-                                           !isWallAt(nx, ny) && 
-                                           nx >= 0 && nx < WORLD_WIDTH && ny >= 0 && ny < WORLD_HEIGHT;
-                        
-                        if (isEmptyField || isEarthField) {
+                        // Prüfe ob im Spielfeld und nicht in Wand
+                        if (nx >= 0 && nx < WORLD_WIDTH && ny >= 0 && ny < WORLD_HEIGHT &&
+                            !isInWall(nx, ny)) {
+                            
                             const hasDiamond = diamonds.some(d => d.gridX === nx && d.gridY === ny && !d.collected);
                             const hasObstacle = obstacles.some(o => o.gridX === nx && o.gridY === ny);
                             const hasExit = exitPosition && getExitX() === nx && getExitY() === ny;
+                            const hasWall = walls.some(w => w.gridX === nx && w.gridY === ny);
                             
-                            if (!hasDiamond && !hasObstacle && !hasExit) {
+                            // Erstelle Diamant wenn kein Hindernis
+                            if (!hasDiamond && !hasObstacle && !hasExit && !hasWall) {
                                 newDiamonds.push({
                                     gridX: nx,
                                     gridY: ny,
@@ -1696,9 +1696,8 @@
                                     fallSpeed: 100
                                 });
                                 
-                                if (isEarthField) {
-                                    tunnel.add(key);
-                                }
+                                // Mache zu Tunnel falls es Erde war
+                                tunnel.add(key);
                                 
                                 // Prüfe ob ein anderes Monster auf diesem Feld ist
                                 monsters.forEach(otherMonster => {
@@ -1707,8 +1706,7 @@
                                         
                                         const playerDist2 = Math.max(Math.abs(playerGridX - otherMonster.gridX), Math.abs(playerGridY - otherMonster.gridY));
                                         if (playerDist2 === 1) {
-                                            gameOver = true;
-                                            gameOverReason = '💥 Killed by chain reaction!';
+                                            playerDied('💥 Killed by chain reaction!');
                                         }
                                         
                                         // Rekursive Kettenreaktion
@@ -1722,6 +1720,8 @@
                 
                 // Füge alle neuen Diamanten zum Array hinzu
                 diamonds.push(...newDiamonds);
+                totalDiamonds += newDiamonds.length;  // Update total diamonds count
+                totalDiamondsNeededDisplay.textContent = totalDiamonds;
             }
         }
         
@@ -1771,8 +1771,7 @@
                     
                     // PRÄ-KOLLISIONSPRÜFUNG: Prüfe ob Monster bereits auf Spieler steht
                     if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
-                        gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        playerDied('👾 Killed by monster!');
                         return;
                     }
                     
@@ -1789,8 +1788,7 @@
                             // KRITISCH: Prüfe Kollision mit Spieler VOR der Bewegung
                             // Verhindert "Durchkreuzen" wenn Spieler und Monster gleichzeitig bewegen
                             if (newX === playerGridX && newY === playerGridY) {
-                                gameOver = true;
-                                gameOverReason = '👾 Killed by monster!';
+                                playerDied('👾 Killed by monster!');
                                 return;
                             }
                             
@@ -1800,8 +1798,7 @@
                             
                             // POST-Kollisionsprüfung (doppelte Absicherung)
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
-                                gameOver = true;
-                                gameOverReason = '👾 Killed by monster!';
+                                playerDied('👾 Killed by monster!');
                             }
                             return; // Fertig mit diesem Monster
                         } else {
@@ -1817,8 +1814,7 @@
                             // KRITISCH: Prüfe Kollision mit Spieler VOR der Bewegung
                             // Verhindert "Durchkreuzen" wenn Spieler und Monster gleichzeitig bewegen
                             if (newX === playerGridX && newY === playerGridY) {
-                                gameOver = true;
-                                gameOverReason = '💣 Killed by monster!';
+                                playerDied('💣 Killed by monster!');
                                 return;
                             }
                             
@@ -1828,8 +1824,7 @@
                             
                             // POST-Kollisionsprüfung (doppelte Absicherung)
                             if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
-                                gameOver = true;
-                                gameOverReason = '💣 Killed by monster!';
+                                playerDied('💣 Killed by monster!');
                             }
                             return; // Fertig mit diesem Monster
                         } else {
@@ -1866,8 +1861,7 @@
                     
                     // KRITISCH: Prüfe VORHER ob Spieler auf Zielfeld ist
                     if (newX === playerGridX && newY === playerGridY) {
-                        gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        playerDied('👾 Killed by monster!');
                         return;
                     }
                     
@@ -1892,8 +1886,7 @@
                         
                         // POST-Kollisionsprüfung nach Bewegung (doppelte Absicherung)
                         if (monster.gridX === playerGridX && monster.gridY === playerGridY) {
-                            gameOver = true;
-                            gameOverReason = '👾 Killed by monster!';
+                            playerDied('👾 Killed by monster!');
                         }
                     }
                 }
@@ -2768,8 +2761,7 @@
                     );
                     
                     if (hasMonster) {
-                        gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        playerDied('👾 Killed by monster!');
                         return; // Bewegung wird abgebrochen
                     }
                     
@@ -2815,8 +2807,7 @@
                     );
                     
                     if (postMonsterCheck) {
-                        gameOver = true;
-                        gameOverReason = '👾 Killed by monster!';
+                        playerDied('👾 Killed by monster!');
                         return;
                     }
                     
@@ -3377,8 +3368,7 @@
                     
                     // Timer abgelaufen - Game Over
                     if (timeRemaining <= 0) {
-                        gameOver = true;
-                        gameOverReason = '⏱️ Time ran out!';
+                        playerDied('⏱️ Time ran out!');
                         timerRunning = false;
                     }
                 }
